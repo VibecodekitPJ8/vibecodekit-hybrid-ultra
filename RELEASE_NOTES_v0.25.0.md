@@ -1,4 +1,4 @@
-# Release Notes — v0.25.0 (2026-05-01)
+# Release Notes — v0.25.0 (2026-05-05)
 
 **Cycle 16: 11th scaffold preset — `osint-terminal`.**
 

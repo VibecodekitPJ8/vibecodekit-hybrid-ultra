@@ -35,7 +35,7 @@ with attribution — from
 [gstack](https://github.com/garrytan/gstack) (© Garry Tan, MIT,
 commit `675717e3`).  Per-version evolution (which release introduced
 which subset, audit probe count growth, etc.) is tracked in
-[`CHANGELOG.md`](CHANGELOG.md); the kit currently ships **95** internal
+[`CHANGELOG.md`](CHANGELOG.md); the kit currently ships **96** internal
 conformance probes — see
 [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) for what that
 number measures and what it does **not** claim.
@@ -121,7 +121,8 @@ buttons it has:
 - **Python-pure browser daemon** — Playwright wired in Phase 1, used
   by `/vck-qa` for sub-second checklist verification.
 - **Scaffold engine** — 11 presets × 3 stacks (saas / landing / shop /
-  blog / dashboard / portfolio / docs / api-todo / mobile / crm).
+  blog / dashboard / portfolio / docs / api-todo / mobile / crm /
+  osint-terminal).
 
 ```
 vibecodekit-hybrid-ultra/
