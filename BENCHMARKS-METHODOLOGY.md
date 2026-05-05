@@ -1,6 +1,6 @@
 # Benchmarks & Methodology
 
-> **TL;DR:** The "87/87 @ 100 %" number in our docs is a
+> **TL;DR:** The "96/96 @ 100 %" number in our docs is a
 > **self-conformance regression test**, not an external quality benchmark.
 > It proves the runtime has not regressed since the last release — it
 > does **not** measure code-generation quality, bug-fix rate, or
@@ -10,8 +10,8 @@
 
 ## 1. What `conformance_audit` actually measures
 
-`conformance_audit` (invoked via `/vibe-audit` or the CLI) runs 87
-internal probes (at v0.16.2; count grows with each release) that check
+`conformance_audit` (invoked via `/vibe-audit` or the CLI) runs 96
+internal probes (at v0.25.2; count grows with each release) that check
 **architectural invariants**:
 
 | Category | Example probes | What it proves |
@@ -23,7 +23,7 @@ internal probes (at v0.16.2; count grows with each release) that check
 | Methodology gates | "Does RRI question bank cover 5 personas x 3 modes?" | Methodology coverage |
 | Security hardening | "Is Unicode Cf-class normalisation applied?" | Permission bypass classes closed |
 
-Passing 87/87 means: **"the runtime has not regressed against its own
+Passing 96/96 means: **"the runtime has not regressed against its own
 specification."**
 
 ## 2. What it does NOT measure
@@ -44,7 +44,7 @@ System"), **not** parity with any external model or tool.
 
 | Claim in docs | What it actually means |
 |---|---|
-| "87/87 probes pass" | All internal regression invariants hold |
+| "96/96 probes pass" | All internal regression invariants hold |
 | "100 % parity" | Runtime matches its own architectural spec |
 | "passes conformance audit" | Self-test gate; not an external benchmark |
 | "588 pytest cases pass" | Unit + integration tests pass (code correctness) |

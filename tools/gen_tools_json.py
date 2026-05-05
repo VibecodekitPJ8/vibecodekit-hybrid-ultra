@@ -75,7 +75,7 @@ def _cli_subcommands() -> List[Dict[str, Any]]:
         {
             "name": "vibe audit",
             "type": "cli",
-            "description": "Run conformance audit (87 probes)",
+            "description": "Run conformance audit (96 probes)",
             "inputSchema": {
                 "type": "object",
                 "properties": {

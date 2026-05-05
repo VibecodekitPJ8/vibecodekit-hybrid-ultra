@@ -29,7 +29,7 @@ Tài liệu hướng dẫn cách sử dụng kit trong **ChatGPT**, **OpenAI Cod
 > [§20 Slash command reference (42 lệnh)](#20-slash-command-reference--42-lệnh),
 > [§21 Sub-agent reference (7 vai)](#21-sub-agent-reference--7-vai),
 > [§22 Hook event reference (33 event + 4 script)](#22-hook-event-reference--33-event--4-script),
-> hoặc [§23 Conformance probe catalog (87 probe)](#23-conformance-probe-catalog--87-probe).
+> hoặc [§23 Conformance probe catalog (96 probe)](#23-conformance-probe-catalog--96-probe).
 
 ---
 
@@ -59,7 +59,7 @@ Tài liệu hướng dẫn cách sử dụng kit trong **ChatGPT**, **OpenAI Cod
 20. [Slash command reference — 42 lệnh](#20-slash-command-reference--42-lệnh)
 21. [Sub-agent reference — 7 vai](#21-sub-agent-reference--7-vai)
 22. [Hook event reference — 33 event + 4 script](#22-hook-event-reference--33-event--4-script)
-23. [Conformance probe catalog — 87 probe](#23-conformance-probe-catalog--87-probe)
+23. [Conformance probe catalog — 96 probe](#23-conformance-probe-catalog--96-probe)
 24. [Permission engine — 6 layer](#24-permission-engine--6-layer)
 25. [Release-gate strategy](#25-release-gate-strategy)
 
@@ -969,7 +969,7 @@ File HTML tự-chứa (không framework, không network), nhúng full JSON summa
 # Lifecycle
 vibe doctor                       # health check
 vibe dashboard                    # runtime dashboard
-vibe audit --threshold 0.85       # 91 probes at v0.16.1 (canonical count grows per release)
+vibe audit --threshold 0.85       # 96 probes at v0.25.2 (canonical count grows per release)
 vibe install <destination>        # cài overlay vào project
 vibe compact [--reactive]         # layer 4/5 compaction
 
@@ -2070,12 +2070,12 @@ echo '{"command":"echo evil"}' | python .claw/hooks/pre_tool_use_my_extra.py
 
 ---
 
-## 23. Conformance probe catalog — 87 probe
+## 23. Conformance probe catalog — 96 probe
 
 > Dùng `vibe audit` để chạy tất cả; `vibe audit --probe <name>` để
 > chạy 1 probe.  Threshold release-gate là **1.0** (100 % parity).
 
-### 23.1 Cluster theo domain (87 probe)
+### 23.1 Cluster theo domain (96 probe)
 
 | Cluster | Range | Mô tả |
 |---|---|---|
