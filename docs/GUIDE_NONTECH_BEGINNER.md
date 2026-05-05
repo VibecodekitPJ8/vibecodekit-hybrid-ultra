@@ -1,4 +1,4 @@
-# Hướng dẫn cho người mới — VibecodeKit Hybrid Ultra v0.25.1
+# Hướng dẫn cho người mới — VibecodeKit Hybrid Ultra v0.25.2
 
 > **Đối tượng:** Người không phải developer — chủ sản phẩm, founder,
 > nhà tư vấn, nhà phân tích, người đang dùng ChatGPT / Claude Code /
@@ -110,12 +110,12 @@ Mở Terminal, đi tới thư mục bạn muốn lưu (ví dụ Desktop):
 
 ```bash
 cd ~/Desktop
-git clone https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra.git
+git clone https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra.git
 cd vibecodekit-hybrid-ultra
 ```
 
 Hoặc nếu chưa có Git: tải zip tại
-https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/archive/refs/heads/main.zip
+https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/archive/refs/heads/main.zip
 → giải nén → mở Terminal trong thư mục đã giải nén.
 
 ### Bước 3.2 — Cài runtime
@@ -672,12 +672,12 @@ pip install -e . --upgrade
 ```
 
 Hoặc theo dõi releases:
-https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/releases
+https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/releases
 
 ### Q6 — Tôi không muốn dùng git, có cách nào?
 
 Có.  Tải zip từ
-https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/archive/refs/heads/main.zip
+https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/archive/refs/heads/main.zip
 → giải nén → mở Terminal vào thư mục → `pip3 install -e .`.
 
 ### Q7 — Tool có gửi data của tôi đi đâu không?
@@ -758,7 +758,7 @@ của bạn.
 
 ### 9.3. Cộng đồng
 
-- GitHub Issues: https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/issues
+- GitHub Issues: https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/issues
 - GitHub Discussions: (đang setup)
 - Telegram (đang setup)
 
@@ -780,7 +780,7 @@ In ra dán bàn làm việc:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  VibecodeKit Hybrid Ultra v0.25.1 — 1-page cheatsheet        │
+│  VibecodeKit Hybrid Ultra v0.25.2 — 1-page cheatsheet        │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │  CÀI:    pip3 install -e .                                   │
@@ -818,6 +818,6 @@ In ra dán bàn làm việc:
 ---
 
 **Phản hồi & câu hỏi:** Mở issue tại
-https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/issues
+https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/issues
 
-**Phiên bản tài liệu:** v0.25.1 (2026-05-03) — Cycle 15 — Cycle 14/13 polish features vẫn áp dụng
+**Phiên bản tài liệu:** v0.25.2 (2026-05-03) — Cycle 15 — Cycle 14/13 polish features vẫn áp dụng

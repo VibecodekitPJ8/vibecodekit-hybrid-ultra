@@ -17,8 +17,8 @@ vulture dead-code + markdown link integrity + secret scan +
 forbidden-module integrity + dependency hygiene
 ```
 
-Audit produced 1 report ([`AUDIT-cycle17-pre-public-release.md`])
-with 19 findings:
+Audit produced 1 report (`AUDIT-cycle17-pre-public-release.md` —
+working artefact, not committed) with 19 findings:
 
 | Severity | Count | What |
 |:---------|:-----:|:-----|
@@ -116,4 +116,3 @@ Or if vendored as a skill bundle:
 # replace your skill bundle with v0.25.1; no migration needed.
 ```
 
-[`AUDIT-cycle17-pre-public-release.md`]: /home/ubuntu/AUDIT-cycle17-pre-public-release.md

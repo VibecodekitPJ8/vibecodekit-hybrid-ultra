@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vibecodekit-hybrid-ultra"
-version = "0.25.1"
+version = "0.25.2"
 description = "Defensive, audit-driven runtime + skill bundle for AI-assisted coding workflows. VIBECODE-MASTER methodology + RRI question banks + permission engine + scaffold engine (11 presets) + 96-probe conformance audit + sub-second browser daemon."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -54,9 +54,9 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra"
-Issues = "https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/issues"
-Changelog = "https://github.com/VibecodekitPJ7/vibecodekit-hybrid-ultra/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra"
+Issues = "https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/issues"
+Changelog = "https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/blob/main/CHANGELOG.md"
 
 [project.scripts]
 vibecodekit = "vibecodekit.cli:main"
