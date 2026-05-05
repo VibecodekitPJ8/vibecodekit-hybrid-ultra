@@ -63,6 +63,20 @@ Devin Review fold-in:
   the link is removed and the inline reference is rendered as plain
   text.  Reported by Devin Review on PR #22.
 
+PR-F3 hot-fix (folded into v0.25.2 before tag):
+
+- **`SECURITY.md:65`** — sed-replace from PR-F2 flipped the org name
+  but left stale metadata: `Canonical org là VibecodekitPJ8 từ
+  v0.17.0+ (rebrand #9, FINAL)` was incorrect (PJ8 is from v0.25.2+
+  and is rebrand #10).  Updated to match the canonical-org
+  docstring in `tests/test_repo_urls_canonical.py`.  Reported by
+  Devin Review on PR #23 (comment 3186247961).
+- **`update-package/CHANGELOG.md:77-78`** — missing blank line
+  between `## [0.25.2]` and `## [0.25.1]` sections; root
+  `CHANGELOG.md:77-79` already had the correct separator.  Mirror
+  re-aligned with root.  Reported by Devin Review on PR #23
+  (comment 3186248053).
+
 Audit gates after PR-F2:
 
 ```
@@ -75,6 +89,7 @@ $ python -m ruff check .            → All checks passed!
 This is **rebrand #10 and FINAL**.  See
 `tests/test_repo_urls_canonical.py` module docstring for the lock
 contract.
+
 ## [0.25.1] — 2026-05-01
 
 Cycle 17 PR-F1 release — **public-readiness audit pass + cleanup**.
