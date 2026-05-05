@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import re
 
-import pytest
 
 from vibecodekit.vn_faker import VnFaker
 

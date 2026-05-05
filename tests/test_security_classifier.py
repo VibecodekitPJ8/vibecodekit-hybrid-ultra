@@ -1,7 +1,6 @@
 """Unit tests for the v0.14.0 security classifier ensemble."""
 from __future__ import annotations
 
-import os
 
 import pytest
 

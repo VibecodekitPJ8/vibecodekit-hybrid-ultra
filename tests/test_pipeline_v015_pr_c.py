@@ -9,7 +9,6 @@ import json
 import sys
 from pathlib import Path
 
-import pytest
 
 REPO = Path(__file__).resolve().parent.parent
 SCRIPTS = REPO / "scripts"
@@ -18,7 +17,6 @@ sys.path.insert(0, str(SCRIPTS))
 from vibecodekit import scaffold_engine as se
 from vibecodekit.pipeline_router import (
     PIPELINES,
-    PipelineDecision,
     PipelineRouter,
 )
 
