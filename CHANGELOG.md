@@ -65,6 +65,8 @@ Devin Review fold-in:
 
 PR-F3 hot-fix (folded into v0.25.2 before tag):
 
+Fixes from Devin Review on PR #23 (the rebrand PR):
+
 - **`SECURITY.md:65`** — sed-replace from PR-F2 flipped the org name
   but left stale metadata: `Canonical org là VibecodekitPJ8 từ
   v0.17.0+ (rebrand #9, FINAL)` was incorrect (PJ8 is from v0.25.2+
@@ -76,6 +78,30 @@ PR-F3 hot-fix (folded into v0.25.2 before tag):
   `CHANGELOG.md:77-79` already had the correct separator.  Mirror
   re-aligned with root.  Reported by Devin Review on PR #23
   (comment 3186248053).
+
+Fixes from Devin Review on PR #21 (the cycle 16 osint-terminal PR,
+already merged + tagged v0.25.0; cleanup folded into the v0.25.2
+release without re-tagging v0.25.0):
+
+- **`README.md:38`** — "Skills inspired by gstack" section said
+  `**95** internal conformance probes`; PR #21 had bumped seven other
+  occurrences to 96 but missed this one.  → 96.  Reported by Devin
+  Review on PR #21 (comment 3186288898).
+- **`README.md:123-124`** — parenthetical preset list said "11
+  presets" but enumeration only had 10 names (missing
+  `osint-terminal`).  Added the new preset to the list.  Reported by
+  Devin Review on PR #21 (comment 3186288973).
+- **`update-package/.claude/commands/vibe-scaffold.md`** — frontmatter
+  bumped to "11 presets" but body had 3 stale "9 preset" / "9-preset"
+  references and the table only had 9 rows (missing both `docs` and
+  `osint-terminal`).  Updated body text + added 2 missing table rows.
+  Reported by Devin Review on PR #21 (comment 3186289027).
+- **`CHANGELOG.md` + `update-package/CHANGELOG.md` + `RELEASE_NOTES_v0.25.0.md`**
+  — v0.25.0 dated `2026-05-01` was earlier than v0.24.0
+  (`2026-05-03`), chronologically inverted.  v0.25.1 also dated
+  `2026-05-01`.  Both bumped to `2026-05-05` to match the actual
+  cycle 17 ship window and resolve the inversion.  Reported by Devin
+  Review on PR #21 (comment 3186289098).
 
 Audit gates after PR-F2:
 
@@ -90,7 +116,7 @@ This is **rebrand #10 and FINAL**.  See
 `tests/test_repo_urls_canonical.py` module docstring for the lock
 contract.
 
-## [0.25.1] — 2026-05-01
+## [0.25.1] — 2026-05-05
 
 Cycle 17 PR-F1 release — **public-readiness audit pass + cleanup**.
 After the cycle 16 v0.25.0 release added the 11th scaffold preset, a
@@ -142,7 +168,7 @@ $ python -m ruff check .            → All checks passed!
 $ python -m vulture --min-conf 80   → 0 findings (2 false positives)
 ```
 
-## [0.25.0] — 2026-05-01
+## [0.25.0] — 2026-05-05
 
 Cycle 16 PR-E1 release — adds the **11th scaffold preset**
 `osint-terminal` (cyan-on-black command-console UI).  Distilled from

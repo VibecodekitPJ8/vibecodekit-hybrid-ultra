@@ -9,19 +9,21 @@ agent: builder
 # /vibe-scaffold
 
 Generate a runnable starter project in seconds — pick a preset and a
-stack and the engine writes the file tree.  All 9 bundled presets:
+stack and the engine writes the file tree.  All 11 bundled presets:
 
 | Preset | Stacks | What it builds |
 |---|---|---|
-| `landing-page` | nextjs | Marketing landing + email capture |
-| `shop-online`  | nextjs | Product catalog + cart skeleton |
-| `crm`          | nextjs **\|** fastapi | Contacts CRUD (web or API) |
-| `blog`         | nextjs | MDX blog with listing |
-| `dashboard`    | nextjs | KPI cards + recharts |
-| `api-todo`     | fastapi | REST todo + pytest |
-| `mobile-app`   | expo   | Expo React Native starter |
-| `portfolio`    | nextjs | Hero + Work + Contact (Framer Motion, Pattern E) |
-| `saas`         | nextjs | NextAuth + Prisma + auth/dashboard split (Pattern B) |
+| `landing-page`   | nextjs | Marketing landing + email capture |
+| `shop-online`    | nextjs | Product catalog + cart skeleton |
+| `crm`            | nextjs **\|** fastapi | Contacts CRUD (web or API) |
+| `blog`           | nextjs | MDX blog with listing |
+| `dashboard`      | nextjs | KPI cards + recharts |
+| `api-todo`       | fastapi | REST todo + pytest |
+| `mobile-app`     | expo   | Expo React Native starter |
+| `portfolio`      | nextjs | Hero + Work + Contact (Framer Motion, Pattern E) |
+| `saas`           | nextjs | NextAuth + Prisma + auth/dashboard split (Pattern B) |
+| `docs`           | nextjs | MDX docs site + i18n + search |
+| `osint-terminal` | nextjs | OSINT-style terminal UI shell (cyan-on-black, JetBrains Mono, RGB-channel pattern) |
 
 Each preset declares `success_criteria` that `verify()` runs — the
 engine will tell you immediately if the scaffold drifted.
@@ -64,7 +66,7 @@ python -m vibecodekit.cli scaffold apply crm ./crm/web --stack nextjs
 python -m vibecodekit.cli scaffold apply crm ./crm/api --stack fastapi
 ```
 
-See `USAGE_GUIDE.md` §16.2 for the 9-preset table, multi-stack monorepo, and `ScaffoldEngine` Python API.
+See `USAGE_GUIDE.md` §16.2 for the 11-preset table, multi-stack monorepo, and `ScaffoldEngine` Python API.
 
 <!-- v0.11.3-runtime-wiring-begin -->
 ## Runtime wiring (v0.11.3)

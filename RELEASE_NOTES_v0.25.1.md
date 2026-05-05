@@ -1,6 +1,6 @@
 # VibecodeKit Hybrid Ultra v0.25.1 — public-readiness audit pass
 
-**Released:** 2026-05-01
+**Released:** 2026-05-05
 **Tag:** `v0.25.1`
 **Cycle:** 17 PR-F1
 **Type:** patch (no public-API change, no code-behavior change)
