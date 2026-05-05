@@ -1,7 +1,6 @@
 """Probe-#54 / #55 / #57 coverage — atomic state file behaviour."""
 from __future__ import annotations
 
-import json
 import os
 import stat
 import sys

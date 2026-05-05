@@ -8,10 +8,61 @@ and [Semver](https://semver.org/).
 > These numbers refer to the project's **internal conformance self-test**
 > (`conformance_audit`) — a regression guard that checks architectural
 > invariants.  They do **not** represent external quality benchmarks.
-> See [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) for details.
+> See [`BENCHMARKS-METHODOLOGY.md`](../BENCHMARKS-METHODOLOGY.md) for details.
 
 ## [Unreleased]
 
+## [0.25.1] — 2026-05-01
+
+Cycle 17 PR-F1 release — **public-readiness audit pass + cleanup**.
+After the cycle 16 v0.25.0 release added the 11th scaffold preset, a
+deep audit (1561 tests / 96 probes / mypy / ruff / vulture / link
+integrity) was run before public PyPI publish.  Audit found 3 critical
+metadata bugs + 4 doc-drift items + 15 lint warnings.  This patch fixes
+all of them.  No code-behavior change; pure metadata + doc + lint
+hygiene.
+
+- **`pyproject.toml` description**: stale `"67-probe audit"` claim →
+  `"96-probe conformance audit"` + `"scaffold engine (11 presets)"`.
+  This is the package metadata visible on the PyPI page (and in
+  `pip show`), so was the highest-impact pre-publish bug.
+- **Broken `BENCHMARKS-METHODOLOGY.md` cross-link** in
+  `update-package/CLAUDE.md:39` and `update-package/CHANGELOG.md:11`.
+  The file lives at repo root; relative path from `update-package/`
+  must use `../`.  Fixed both to `../BENCHMARKS-METHODOLOGY.md`.
+- **`SKILL.md`** lines 201, 208 — stale `"92-probe internal self-test"`
+  → `"96-probe internal self-test"`.
+- **`USAGE_GUIDE.md`** + **`update-package/USAGE_GUIDE.md`** —
+  stale `"92 probes"` → `"96 probes"`; stale
+  `"87-probe conformance audit"` → `"96-probe conformance audit"`;
+  stale `"scaffold preset (10 × 3 = 30)"` → `"11 × 3 = 33"`.
+- **`docs/GUIDE_NONTECH_BEGINNER.md`** — stale `"92 probes"` and
+  `"92 probe self-test (rare)"` → `96`.
+- **Lint cleanup (15 warnings → 0)**: `python -m ruff check .` was
+  reporting `F401`/`F841` warnings on dead imports + 1 unused local
+  variable.  All fixed with `ruff check . --fix` (auto-removable) +
+  1 manual edit (`tests/test_vn_error_translator.py:162` —
+  `yaml_mod = pytest.importorskip("yaml")` →
+  `pytest.importorskip("yaml")` since the module reference was never
+  used).  Files touched: 12 in `tests/` + 2 in `tools/`
+  (`tools/gen_tools_json.py`, `tools/validate_release.py`).
+- **VERSION bump**: `0.25.0` → `0.25.1`.  All 8 mirror surfaces
+  re-synced via `tools/sync_version.py`.  6 `tokens.json` regenerated
+  with the new version field.  New
+  `benchmarks/intent_router_0.25.1.json` dump (set-inclusion 0.9808,
+  exact-match 0.8942 — same as 0.25.0; intent router unchanged).
+- **No PJ7 → PJ8 rebrand** in this PR; that lives in PR-F2 of cycle 17
+  per the audit report's split.
+
+Audit gates after PR-F1:
+
+```
+$ pytest tests/ -q                  → 1561 passed, 9 skipped, 0 failed
+$ python -m vibecodekit.cli audit   → 96/96 met=true
+$ python -m mypy --strict <9 core>  → Success: no issues found
+$ python -m ruff check .            → All checks passed!
+$ python -m vulture --min-conf 80   → 0 findings (2 false positives)
+```
 ## [0.25.0] — 2026-05-01
 
 Cycle 16 PR-E1 release — adds the **11th scaffold preset**

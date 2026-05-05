@@ -7,7 +7,6 @@ verify (a) executor abort không invoke subprocess, (b) audit log entry
 from __future__ import annotations
 
 import json
-import os
 import sys
 from pathlib import Path
 

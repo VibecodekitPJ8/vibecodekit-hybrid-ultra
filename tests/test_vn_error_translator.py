@@ -159,7 +159,7 @@ def test_translated_error_render_has_two_lines() -> None:
 
 def test_yaml_loader_with_valid_entry(tmp_path: Path) -> None:
     """Khi PyYAML có sẵn + YAML hợp lệ → entries thêm vào pool."""
-    yaml_mod = pytest.importorskip("yaml")
+    pytest.importorskip("yaml")
     p = tmp_path / "extra.yaml"
     p.write_text(
         "- pattern: 'CustomErrorXYZ:\\s*(.+)'\n"

@@ -11,7 +11,6 @@ import sys
 import tempfile
 from pathlib import Path
 
-import pytest
 
 _PKG = str(Path(__file__).resolve().parent.parent / "scripts")
 _REPO = str(Path(__file__).resolve().parent.parent)

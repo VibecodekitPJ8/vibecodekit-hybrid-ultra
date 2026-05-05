@@ -10,7 +10,6 @@ import json
 from pathlib import Path
 from typing import Iterator
 
-import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = REPO_ROOT / "manifest.llm.json"
