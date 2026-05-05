@@ -1,15 +1,6 @@
 {
   "_state": {
-    "consecutive": 2,
-    "total": 2
-  },
-  "5c7923bd67b06c93": {
-    "action": "rm -rf /",
-    "count": 2,
-    "reasons": [
-      "destructive recursive delete",
-      "destructive recursive delete"
-    ],
-    "last_ts": 1777961807.4738646
+    "consecutive": 0,
+    "total": 0
   }
 }
