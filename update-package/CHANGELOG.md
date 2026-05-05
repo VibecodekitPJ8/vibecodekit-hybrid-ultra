@@ -12,6 +12,69 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.25.2] — 2026-05-05
+
+Cycle 17 PR-F2 release — **PJ7 → PJ8 rebrand (rebrand #10, FINAL)**.
+
+This patch closes the doc-vs-reality mismatch surfaced by the cycle 17
+audit ([`AUDIT-cycle17-pre-public-release.md`]):
+- The live origin of `vibecodekit-hybrid-ultra` has been at
+  `github.com/VibecodekitPJ8/...` since cycle 13+ (visible in PR URLs,
+  `git remote -v`, etc.).
+- However, all forward-facing docs + `pyproject.toml` URLs + tests
+  asserted `VibecodekitPJ7` as the canonical org ("FINAL" since cycle
+  8 PR1).
+- A user following `git clone https://github.com/VibecodekitPJ7/...`
+  in `README.md` would NOT land on the working repo — a critical
+  pre-public-release UX bug.
+
+PR-F2 flips canonical org to `VibecodekitPJ8` so docs match reality:
+
+- **`tests/test_canonical_org_no_bypass.py`** —
+  `test_allowed_orgs_contains_pj7` → `_pj8`,
+  `test_ci_yml_references_pj7` → `_pj8`.  Docstring updated to
+  document rebrand chain `…PJ6 → PJ7 → PJ8` with PJ8 = "FINAL #10".
+- **`tests/test_repo_urls_canonical.py`** — `ALLOWED_ORGS` flipped
+  `PJ7` → `PJ8`.  Module docstring updated with full background of
+  the rebrand-#10 decision.  `_HISTORICAL_GLOBS` + `_HISTORICAL_NAMES`
+  added to skip historical RELEASE_NOTES (v0.17 - v0.25.1) +
+  CHANGELOG.md from the canonical-org scan, since rewriting
+  time-stamped release notes would falsify the audit trail.
+- **`pyproject.toml` URLs** — Homepage / Issues / Changelog flipped
+  `PJ7` → `PJ8` (visible on PyPI page).
+- **`README.md`** 5 `git clone` URLs flipped `PJ7` → `PJ8`.
+- **`CONTRIBUTING.md`** + **`SECURITY.md`** + **`examples/README.md`**
+  + **`docs/GUIDE_NONTECH_BEGINNER.md`** (6 URLs) — same flip.
+- **`.github/workflows/ci.yml`** — 4 `VibecodekitPJ7` references in
+  the canonical-owner drift guard flipped to `VibecodekitPJ8`.
+- **Update-package mirrors** — `update-package/{CLAUDE.md,USAGE_GUIDE.md,
+  README.md,SKILL.md,.claude/commands/vck-pipeline.md}` all synced.
+- **VERSION 0.25.1 → 0.25.2** + sync_version (8 mirror surfaces) +
+  6 `tokens.json` regenerated + new
+  `benchmarks/intent_router_0.25.2.json` (set-incl 0.9808 unchanged
+  — intent router unaffected).
+
+Devin Review fold-in:
+
+- **`RELEASE_NOTES_v0.25.1.md`** line 119 had a hardcoded local
+  absolute path `[\`AUDIT-cycle17-pre-public-release.md\`]:
+  /home/ubuntu/AUDIT-cycle17-pre-public-release.md`.  The audit
+  report is intentionally a working artefact (not a release artefact);
+  the link is removed and the inline reference is rendered as plain
+  text.  Reported by Devin Review on PR #22.
+
+Audit gates after PR-F2:
+
+```
+$ pytest tests/ -q                  → 1561 passed, 9 skipped, 0 failed
+$ python -m vibecodekit.cli audit   → 96/96 met=true
+$ python -m mypy --strict <9 core>  → Success: no issues found
+$ python -m ruff check .            → All checks passed!
+```
+
+This is **rebrand #10 and FINAL**.  See
+`tests/test_repo_urls_canonical.py` module docstring for the lock
+contract.
 ## [0.25.1] — 2026-05-01
 
 Cycle 17 PR-F1 release — **public-readiness audit pass + cleanup**.
