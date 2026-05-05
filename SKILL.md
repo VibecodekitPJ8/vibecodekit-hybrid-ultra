@@ -237,7 +237,7 @@ release:
 | L | Structured notifications (lock) |      v0.9 | `task_runtime.py`     | 30    |
 
 The conformance audit (`python -m vibecodekit.cli audit`) now runs
-**92 internal regression probes** at current main (30 OS + methodology +
+**96 internal regression probes** at current main (30 OS + methodology +
 packaging/wiring + integration invariants) — an internal self-test
 that verifies the runtime has not regressed against its own
 specification (see [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md)

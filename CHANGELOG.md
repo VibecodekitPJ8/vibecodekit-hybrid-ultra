@@ -116,6 +116,64 @@ This is **rebrand #10 and FINAL**.  See
 `tests/test_repo_urls_canonical.py` module docstring for the lock
 contract.
 
+PR-F5 deep-sweep hot-fix (folded into v0.25.2 before tag):
+
+User-requested deep audit re-pass after PR-F4 merge to catch any
+remaining stale forward-facing metadata.  Found 8 real drift items in
+user-visible docs + tools.json regen drift.  No code-behavior change;
+pure metadata + doc + generated-file hygiene.  All 8 are forward-facing
+user docs (a v0.25.2 user reading them would see incorrect probe
+counts); historical files (older RELEASE_NOTES, CHANGELOG audit-trail
+entries describing past releases) intentionally left frozen.
+
+- **`SKILL.md:240`** — stale `"92 internal regression probes"` →
+  `"96"`.  Missed by PR-F1 sweep.
+- **`QUICKSTART.md:63,105`** — stale `"92/96 probes pass"` →
+  `"96/96"` (leading number was old probe-count baseline that didn't
+  get bumped when total grew from 92 to 96).
+- **`update-package/QUICKSTART.md:57,99`** — stale `"87/91 probes
+  pass"` → `"96/96"` (same pattern, frozen at v0.16 era).
+- **`USAGE_GUIDE.md` + mirror** — 5 occurrences updated:
+  - TOC link `§23 Conformance probe catalog (87 probe)` → `(96 probe)`
+  - section heading `## 23. Conformance probe catalog — 87 probe` →
+    `— 96 probe`
+  - sub-heading `### 23.1 Cluster theo domain (87 probe)` → `(96 probe)`
+  - inline comment `# 91 probes at v0.16.1` → `# 96 probes at v0.25.2`
+  - intra-page anchor `#23-conformance-probe-catalog--87-probe` →
+    `--96-probe` (matched to new heading)
+- **`update-package/.claude/commands/vibe.md:168`** —
+  `91-probe internal self-test` → `96-probe internal self-test`
+  (slash-command help text user sees in IDE).
+- **`tools/gen_tools_json.py:78`** — hardcoded
+  `"Run conformance audit (87 probes)"` → `"(96 probes)"`.  Source
+  of truth for `tools.json`.
+- **`tools.json`** — regenerated via `python tools/gen_tools_json.py`.
+  Picked up the (87 → 96) probe-count fix above and the (0.16.2 →
+  0.25.2) version field that had also drifted.  This is the
+  consumer-facing tool registry; `pip show vibecodekit-hybrid-ultra`
+  reads it.
+- **`scripts/vibecodekit/verb_router.py:23,127,128`** — 3 docstring
+  occurrences of `87-probe` → `96-probe`.  Module is in the 9-core
+  mypy strict list; verified `mypy --strict` still clean.
+- **`BENCHMARKS-METHODOLOGY.md:3,13,14,26,47`** — 5 pedagogical
+  examples using `"87/87 @ 100 %"` → `"96/96 @ 100 %"`.  The doc
+  explains that the count grows per release; updating the canonical
+  example to current count keeps it consistent with what a v0.25.2
+  user observes when running `/vibe-audit`.
+
+Notes:
+- `tests/test_end_to_end_install.py:117,126` retain the `≥ 87`
+  regression-guard comment intentionally — the test asserts
+  `total >= 87` as a permanent lower bound (probes can grow but
+  never silently drop), so the comment is contractually correct.
+- `references/40-ethos-vck.md:61` retains `87-probe audit (at
+  v0.15.4; was 53 in v0.11.x)` intentionally — it's a historical
+  evolution narrative (53 → 87 → ... → 96), not a current claim.
+- All `RELEASE_NOTES_v0.{15..24}.0.md` and the corresponding
+  CHANGELOG audit-trail entries describing what those releases
+  shipped retain their original probe counts; they are historical
+  artefacts and must remain frozen.
+
 ## [0.25.1] — 2026-05-05
 
 Cycle 17 PR-F1 release — **public-readiness audit pass + cleanup**.

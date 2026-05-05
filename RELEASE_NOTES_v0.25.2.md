@@ -102,6 +102,34 @@ Per `tests/test_repo_urls_canonical.py` module docstring:
 > hard-blocking (legal / trademark) được trình bày rõ ràng trong PR
 > body kèm sign-off của maintainer.
 
+## PR-F5 deep-sweep hot-fix (folded into v0.25.2 before tag)
+
+User-requested deep audit re-pass after PR-F4 merge.  Found 8 real
+forward-facing drift items + `tools.json` regen drift.  No code-behavior
+change; pure metadata + doc + generated-file hygiene.
+
+| # | File | Drift | Fix |
+|:-:|:-----|:------|:----|
+| 1 | `SKILL.md:240` | "92 internal regression probes" | → 96 |
+| 2 | `QUICKSTART.md:63,105` | "92/96 probes pass" | → 96/96 |
+| 3 | `update-package/QUICKSTART.md:57,99` | "87/91 probes pass" | → 96/96 |
+| 4 | `USAGE_GUIDE.md` + mirror | TOC + §23 heading + sub-heading + audit comment ("87 probe", "91 probes at v0.16.1") | → 96 + 96 probes at v0.25.2 |
+| 5 | `update-package/.claude/commands/vibe.md:168` | "91-probe internal self-test" | → 96-probe |
+| 6 | `tools/gen_tools_json.py:78` | hardcoded "(87 probes)" | → "(96 probes)" |
+| 7 | `tools.json` | regenerated; also picked up version drift (0.16.2 → 0.25.2) | tracked |
+| 8 | `scripts/vibecodekit/verb_router.py:23,127,128` | 3× "87-probe" docstring | → 96-probe (mypy strict 9-core still clean) |
+| 9 | `BENCHMARKS-METHODOLOGY.md:3,13,14,26,47` | 5 pedagogical "87/87 @ 100 %" examples | → "96/96 @ 100 %" |
+
+Frozen intentionally:
+- `tests/test_end_to_end_install.py:117,126` keep `>= 87` regression
+  guard (lower bound, contractually correct — probes can grow but
+  not silently drop).
+- `references/40-ethos-vck.md:61` keeps `87-probe audit (at v0.15.4;
+  was 53 in v0.11.x)` as a historical evolution narrative.
+- All `RELEASE_NOTES_v0.{15..24}.0.md` and audit-trail entries in
+  CHANGELOG describing past releases stay frozen with their
+  original counts.
+
 ## Upgrade
 
 ```bash

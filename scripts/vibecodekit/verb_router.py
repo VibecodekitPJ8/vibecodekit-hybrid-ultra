@@ -20,7 +20,7 @@ t\u1edbi slash command canonical t\u01b0\u01a1ng \u1ee9ng.  M\u1ee5c \u0111\u00e
 | ``review`` | ``/vck-review``           | Adversarial multi-specialist       |
 | ``qa``     | ``/vck-qa``               | Real-browser QA + fix loop         |
 | ``ship``   | ``/vck-ship``             | test \u2192 review \u2192 commit \u2192 PR     |
-| ``audit``  | ``/vibe-audit``           | 87-probe internal self-test        |
+| ``audit``  | ``/vibe-audit``           | 96-probe internal self-test        |
 | ``doctor`` | ``/vibe-doctor``          | overlay health check               |
 
 L\u01b0u \u00fd
@@ -124,8 +124,8 @@ Verbs (8):
   ship      \u2192 /vck-ship         VN: test \u2192 review \u2192 commit \u2192 push \u2192 PR
                                   EN: test \u2192 review \u2192 commit \u2192 push \u2192 PR
 
-  audit     \u2192 /vibe-audit       VN: 87-probe internal conformance self-test
-                                  EN: 87-probe internal regression gate
+  audit     \u2192 /vibe-audit       VN: 96-probe internal conformance self-test
+                                  EN: 96-probe internal regression gate
 
   doctor    \u2192 /vibe-doctor      VN: ki\u1ec3m tra overlay c\u00e0i \u0111\u00fang
                                   EN: overlay health check

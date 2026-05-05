@@ -116,6 +116,30 @@ This is **rebrand #10 and FINAL**.  See
 `tests/test_repo_urls_canonical.py` module docstring for the lock
 contract.
 
+PR-F5 deep-sweep hot-fix (folded into v0.25.2 before tag):
+
+User-requested deep audit re-pass after PR-F4 merge to catch any
+remaining stale forward-facing metadata.  Found 8 real drift items in
+user-visible docs + tools.json regen drift.  No code-behavior change;
+pure metadata + doc + generated-file hygiene.
+
+- **`SKILL.md:240`** — stale `"92 internal regression probes"` → `96`.
+- **`QUICKSTART.md:63,105`** — stale `"92/96 probes pass"` → `96/96`.
+- **`update-package/QUICKSTART.md:57,99`** — stale `"87/91 probes
+  pass"` → `96/96`.
+- **`USAGE_GUIDE.md` + mirror** — TOC + §23 heading + sub-heading +
+  audit comment all bumped from `87 probe` / `91 probes at v0.16.1`
+  → `96 probe` / `96 probes at v0.25.2`.
+- **`update-package/.claude/commands/vibe.md:168`** —
+  `91-probe internal self-test` → `96-probe internal self-test`.
+- **`tools/gen_tools_json.py:78`** — hardcoded `87 probes` → `96`.
+- **`tools.json`** — regenerated; also picked up version drift
+  (0.16.2 → 0.25.2).
+- **`scripts/vibecodekit/verb_router.py:23,127,128`** — 3 docstring
+  `87-probe` → `96-probe`.  mypy strict 9-core still clean.
+- **`BENCHMARKS-METHODOLOGY.md`** — 5 pedagogical examples
+  `87/87` → `96/96`.
+
 ## [0.25.1] — 2026-05-05
 
 Cycle 17 PR-F1 release — **public-readiness audit pass + cleanup**.
