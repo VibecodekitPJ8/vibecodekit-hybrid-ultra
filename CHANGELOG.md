@@ -12,6 +12,99 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.25.4] — 2026-05-05
+
+Cycle 20 + 21 wrap-up — **clean release artifact bundling Devin-session
+enablement (skill + demo + new-session guide) and final audit drift
+cleanup**.
+
+No new features, no breaking changes — this release rolls up PR #30 +
+#31 + #32 (cycle 20) into a single tagged artifact so downstream
+consumers (PyPI, skill-zip, devin-session-init) pin to v0.25.4 rather
+than the floating tip of `main`.
+
+Full rationale + per-PR commit map live in
+[`RELEASE_NOTES_v0.25.4.md`](RELEASE_NOTES_v0.25.4.md).
+
+### Added (cycle 20)
+
+- **`.devin/skills/build-with-vibecodekit/SKILL.md`** (PR #30) — Devin
+  session skill (~200 lines).  When a Devin session is started in this
+  repo, the skill is auto-discovered; user prompts mentioning
+  "vibecodekit", "/vibe", "vck-ship", "8-step pipeline", etc. invoke
+  the skill, which documents one-time setup, the 17 CLI subcommands,
+  the 8-step pipeline (scan → RRI → vision → blueprint → task graph →
+  build → verify → ship), and the ACL boundary on what Devin may
+  execute without escalating to the user.
+- **`examples/devin_pipeline_demo.py`** (PR #30) — programmatic 8-step
+  walkthrough (~280 lines).  Generates ~20 file artefacts
+  deterministically without touching live project state.  Exit 0,
+  offline, no network.
+- **`README.md` §9 — "Dùng tool với Devin session mới"** (PR #32,
+  ~150 lines).  Bilingual onboarding for users who want to drive the
+  pipeline through Devin instead of Claude Code / Cursor.  Includes
+  prompt template, 10 prompt examples by project type, workflow
+  timeline, and Q&A.
+- **`docs/DEVIN_NEW_SESSION_GUIDE.md`** (PR #32, ~400 lines) — deep-dive
+  companion to README §9.  Covers one-time install on Devin VM, prompt
+  template + 4 anti-patterns, per-step walkthrough with action /
+  expected-output / gate / failure recovery, 5 patterns (new-project /
+  add-module / audit / generate-tests / code-review), approval / secret
+  / 2FA workflow, troubleshooting 10 errors, glossary 12 terms.
+
+### Fixed (cycle 20)
+
+- **`examples/devin_pipeline_demo.py` — `--keep` flag dead code**
+  (PR #31).  `args.keep` was defined but never referenced; help text
+  advertised a non-existent `--no-keep` flag that would crash argparse.
+  Switched to `argparse.BooleanOptionalAction` (Python 3.9+; matches
+  `requires-python`), added `default=True`, added cleanup logic
+  `if not args.keep: shutil.rmtree(target, ignore_errors=True)` at end
+  of `main()`.  Both `--keep` and `--no-keep` paths verified.
+- **`examples/devin_pipeline_demo.py` — subprocess env stripping**
+  (PR #31).  `subprocess.run(env={"PYTHONPATH": ...})` *replaces* the
+  entire parent environment, stripping `HOME` / `LANG` / `LC_ALL` /
+  `TMPDIR` / `PATH`.  Changed to
+  `child_env = {**os.environ, "PYTHONPATH": str(REPO_ROOT / "scripts")}`
+  so parent env propagates and only `PYTHONPATH` is overridden.
+  Defensive fix — current doctor check happened to work, but future
+  doctor checks calling `Path.home()` / `expanduser("~")` /
+  `locale.getpreferredencoding()` / spawning child subprocesses would
+  silently fail under the old env-replacement approach.
+
+### Fixed (cycle 21 — audit drift cleanup)
+
+- **`scripts/vibecodekit/conformance/_registry.py:3`** (PR #32) —
+  module docstring read "Source of truth for the 92 conformance probes
+  since cycle 14 PR β-6"; expanded to also mention cycle 16 PR-E1
+  bumping the count to 96.  Forward-facing module documentation now
+  accurate.
+- **`USAGE_GUIDE.md:1424` + `update-package/USAGE_GUIDE.md:1237`**
+  (PR #32) — "Tham khảo §23 cho catalog đầy đủ 87 probe" → "96 probe".
+  Stale probe-count drift sót lại sau cycle 17 cleanup chuỗi
+  (PR #22 → #26).
+- **`tests/test_content_depth.py:259-264`** (PR #32) — comment "All 9
+  scaffold presets ship" + 10-entry validation tuple did not include
+  `osint-terminal` (added in cycle 16 PR #21).  `install_manifest.plan()`
+  did ship `osint-terminal` correctly, but the test had a regression
+  coverage gap.  Comment now reads "All 11 scaffold presets ship" and
+  the tuple includes `osint-terminal`, closing the coverage gap.
+
+### Tag
+
+`v0.25.4` annotated tag pushed from `main` HEAD after PR-J1 (this PR)
+merge.  Target commit will include the full cycle 20 + 21 chain
+(PR #30 → #31 → #32 → PR-J1).
+
+### Audit gates at v0.25.4
+
+```
+pytest                → 1566 passed, 9 skipped
+ruff check .          → All checks passed
+audit                 → 96/96 met=True parity=1.0000
+mypy --strict 9 core  → Success: no issues found in 9 source files
+```
+
 ## [0.25.3] — 2026-05-01
 
 Cycle 18 PR-G1 — **2 non-blocking UX/DX issues from v0.25.2 audit**.

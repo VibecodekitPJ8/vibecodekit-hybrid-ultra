@@ -11,7 +11,7 @@
 > verify → ship) và sinh ra sản phẩm chạy được.  ~20 phút đọc, có
 > worked example "App quản lý chi tiêu gia đình" A→Z.
 
-> **Current release:** v0.25.3 ([CHANGELOG](CHANGELOG.md)) — see [Layout](#layout) below for the surface inventory (42 slash commands, 7 sub-agent roles, 33 hook events, 96 conformance probes, …).
+> **Current release:** v0.25.4 ([CHANGELOG](CHANGELOG.md)) — see [Layout](#layout) below for the surface inventory (42 slash commands, 7 sub-agent roles, 33 hook events, 96 conformance probes, …).
 >
 > **License:** MIT — see [`LICENSE`](LICENSE) and the third-party
 > attribution manifest [`LICENSE-third-party.md`](LICENSE-third-party.md).
@@ -170,7 +170,7 @@ vibe permission "git status" --user-runtime
 # → allow (default mode), exit 0
 ```
 
-`--user-runtime` (v0.25.3+) lưu state về `~/.vibecode/` thay vì `$cwd` —
+`--user-runtime` (xem `CHANGELOG.md` cho release ship) lưu state về `~/.vibecode/` thay vì `$cwd` —
 tránh pollute working directory. Chi tiết:
 [`references/10-permission-classification.md`](references/10-permission-classification.md).
 
@@ -238,7 +238,7 @@ vibe intent route "tôi muốn làm trang điều khiển OSINT"
 ```
 
 Benchmark hiện tại: set-inclusion accuracy 0.9808 (xem
-`benchmarks/intent_router_0.25.3.json`).
+`benchmarks/intent_router_0.25.4.json`).
 
 #### 5.8. Hooks — 33 lifecycle event
 
@@ -294,7 +294,7 @@ cần network. Skill cho Devin session: [`.devin/skills/build-with-vibecodekit/S
 
 | Lỗi | Nguyên nhân | Sửa |
 |:----|:-----------|:----|
-| `pytest` báo `ModuleNotFoundError: No module named 'tests'` | Repo cũ trước v0.25.3 | Update lên `v0.25.3+` (fix qua `pythonpath = ["."]`) hoặc tạm dùng `PYTHONPATH=. pytest` |
+| `pytest` báo `ModuleNotFoundError: No module named 'tests'` | Repo cũ chưa có `pythonpath = ["."]` trong `pyproject.toml` (xem `CHANGELOG.md` cho release ship fix) | Update lên release mới nhất hoặc tạm dùng `PYTHONPATH=. pytest` |
 | `vibe permission` để lại `.vibecode/runtime/denials.json` trong `$cwd` | Quên cờ `--user-runtime` | Dùng `vibe permission "<cmd>" --user-runtime` để state về `~/.vibecode/` |
 | `pip3 install ...` báo `externally-managed-environment` | Python system protected (PEP 668) | `python3 -m venv .venv && source .venv/bin/activate && pip install ...` |
 | Tool không hiểu mô tả tiếng Việt | Intent router cần keyword cụ thể (xem `references/00-overview.md` §intent) | Thêm từ khoá scaffold: "tôi muốn làm **app saas**…" hoặc "**trang điều khiển**…" |
@@ -515,7 +515,7 @@ Full walkthrough: [`USAGE_GUIDE.md` §18](USAGE_GUIDE.md#18-activation-cheat-she
 
 ## Layout
 
-**Surface inventory (v0.25.3)** — moved here from the opening to keep
+**Surface inventory (v0.25.4)** — moved here from the opening to keep
 the front matter focused on what the kit *does* rather than how many
 buttons it has:
 
