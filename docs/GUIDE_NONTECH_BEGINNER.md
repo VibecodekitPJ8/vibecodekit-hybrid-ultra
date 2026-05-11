@@ -1,4 +1,4 @@
-# Hướng dẫn cho người mới — VibecodeKit Hybrid Ultra v0.25.2
+# Hướng dẫn cho người mới — VibecodeKit Hybrid Ultra v0.25.3
 
 > **Đối tượng:** Người không phải developer — chủ sản phẩm, founder,
 > nhà tư vấn, nhà phân tích, người đang dùng ChatGPT / Claude Code /
@@ -780,7 +780,7 @@ In ra dán bàn làm việc:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  VibecodeKit Hybrid Ultra v0.25.2 — 1-page cheatsheet        │
+│  VibecodeKit Hybrid Ultra v0.25.3 — 1-page cheatsheet        │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │  CÀI:    pip3 install -e .                                   │
@@ -820,4 +820,4 @@ In ra dán bàn làm việc:
 **Phản hồi & câu hỏi:** Mở issue tại
 https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/issues
 
-**Phiên bản tài liệu:** v0.25.2 (2026-05-03) — Cycle 15 — Cycle 14/13 polish features vẫn áp dụng
+**Phiên bản tài liệu:** v0.25.3 (2026-05-01) — Cycle 18 — Cycle 14/13/15/17 polish features vẫn áp dụng

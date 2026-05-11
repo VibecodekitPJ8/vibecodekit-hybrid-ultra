@@ -12,6 +12,48 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.25.3] — 2026-05-01
+
+Cycle 18 PR-G1 — **2 non-blocking UX/DX issues from v0.25.2 audit**.
+
+Two latent issues observed during the v0.25.2 release audit but
+deferred as non-blocking are now fixed in this patch release.  Full
+rationale + reproduction steps live in
+[`RELEASE_NOTES_v0.25.3.md`](../RELEASE_NOTES_v0.25.3.md).
+
+### Fix 1 — pytest discovery without `PYTHONPATH=.`
+
+Added `pythonpath = ["."]` to `[tool.pytest.ini_options]` in
+`pyproject.toml`.  Now `pytest` standalone collects all 1566 tests
+without manual sys.path tweaks — onboarding friction removed.
+
+### Fix 2 — `vibe permission` no longer pollutes `$cwd` by default
+
+Added `--user-runtime` flag to `vibe permission` that redirects
+`DenialStore` root from `$cwd` to `~/.vibecode/` (semantically correct
+— denial state tracks **user** behaviour, not per-project).  Falls
+back to `.` if `$HOME` not writable.  QUICKSTART examples updated.
+
+```bash
+vibe permission "rm -rf /" --user-runtime   # state → ~/.vibecode/
+```
+
+### Bookkeeping
+
+- `.gitignore` — explicit ignore for `.vibecode/runtime/denials.json|.lock`.
+- 5 new tests in `tests/test_cli_permission_user_runtime.py`.
+- VERSION 0.25.2 → 0.25.3 + sync_version (8 mirrors) + 6 tokens.json
+  regen + new `benchmarks/intent_router_0.25.3.json`.
+
+### Gates
+
+- pytest → 1566 passed, 9 skipped (was 1561 at v0.25.2)
+- audit → 96/96 met=True parity=1.0000
+- mypy --strict 9 core → Success
+- ruff check . → All checks passed
+
+PR: TBD (PR-G1 cycle 18).
+
 ## [0.25.2] — 2026-05-05
 
 Cycle 17 PR-F2 release — **PJ7 → PJ8 rebrand (rebrand #10, FINAL)**.

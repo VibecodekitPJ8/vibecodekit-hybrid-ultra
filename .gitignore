@@ -41,6 +41,12 @@ Thumbs.db
 .vibecode/runtime/denial_store/
 .vibecode/runtime/cost_ledger/
 .vibecode/runtime/event_bus/
+# v0.25.3: deny pollution from `vibe permission` examples (QUICKSTART §3).
+# DenialStore self-seeds on first instantiation, so no committed seed file
+# is needed.  Use `vibe permission --user-runtime` for ad-hoc demos to
+# write to ~/.vibecode/ instead.
+.vibecode/runtime/denials.json
+.vibecode/runtime/denials.lock
 
 # Local install / scratch
 scratch/

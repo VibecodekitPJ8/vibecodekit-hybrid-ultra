@@ -137,8 +137,34 @@ def _cmd_activate(args: argparse.Namespace) -> int:
     return 0 if out.get("activate") else 1
 
 
+def _user_runtime_root() -> str:
+    """Return ``$HOME`` as a root for cross-project denial state.
+
+    Permission engine state (denial circuit-breaker, repeated-denial
+    detection) tracks user behaviour, not per-project state — so a user
+    cache is more semantically correct than ``$cwd``.  Returning the
+    home dir lets ``DenialStore`` (which appends ``.vibecode/runtime/``
+    to its root) write to ``~/.vibecode/runtime/denials.json`` — the
+    canonical user-cache location.  Falls back to ``"."`` if home dir
+    not writable (very rare).
+
+    See QUICKSTART.md §3 example — ``vibe permission --user-runtime``
+    keeps the demo from polluting ``$cwd/.vibecode/runtime/denials.json``
+    when run from a project directory.
+    """
+    home = Path.home()
+    # Probe writability without creating the runtime dir prematurely;
+    # DenialStore handles mkdir.
+    try:
+        (home / ".vibecode").mkdir(parents=True, exist_ok=True)
+    except OSError:
+        return "."
+    return str(home)
+
+
 def _cmd_permission(args: argparse.Namespace) -> int:
-    d = permission_engine.decide(args.command, mode=args.mode, root=args.root,
+    root = _user_runtime_root() if args.user_runtime else args.root
+    d = permission_engine.decide(args.command, mode=args.mode, root=root,
                                  allow_unsafe_yolo=args.unsafe)
     print(json.dumps(d, ensure_ascii=False, indent=2))
     return 0 if d["decision"] == "allow" else 2
@@ -868,6 +894,12 @@ def main(argv=None) -> int:
             sub.add_argument("command")
             sub.add_argument("--mode", default="default")
             sub.add_argument("--unsafe", action="store_true")
+            sub.add_argument(
+                "--user-runtime", action="store_true",
+                help="Store denial state in ~/.vibecode/ instead of "
+                     "$cwd/.vibecode/runtime/ (recommended for ad-hoc CLI "
+                     "demos to avoid polluting the working directory).",
+            )
             sub.set_defaults(fn=_cmd_permission)
         elif cmd_name == "install":
             sub.add_argument("destination")
