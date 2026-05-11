@@ -28,6 +28,281 @@ Runs 6 steps offline: doctor health-check, permission engine (classify 5
 commands), conformance audit (96 probes), scaffold preview, intent router,
 and MCP selfcheck.  See [`examples/`](examples/) for standalone scripts.
 
+---
+
+## 🇻🇳 Hướng dẫn tiếng Việt — từ A → Z cho người mới
+
+> **Đối tượng:** product owner, founder, designer, analyst, hoặc developer
+> đang dùng AI coding agent (Claude Code / ChatGPT / Cursor / Codex) muốn
+> nâng cấp từ "vibe coding bừa bãi" lên **phương pháp + document + audit
+> gate**. Không cần biết Python / Git / TypeScript — chỉ cần biết gõ chat
+> + copy-paste lệnh đôi lúc.
+
+### Tool này dùng để làm gì?
+
+VibecodeKit Hybrid Ultra là một **bộ "luật chơi"** cho AI coding agent.
+Thay vì gõ "AI ơi làm cho tôi app X" rồi cầu mong AI hiểu đúng, bạn gõ
+**một câu mô tả tiếng Việt** và tool tự bắt AI đi qua **8 bước có document
++ có gate kiểm tra**:
+
+```
+scan repo → RRI (16 câu phỏng vấn) → vision → blueprint → task graph
+   → build từng task → verify (RRI-T / RRI-UX) → ship (CI + deploy)
+```
+
+Mỗi bước in ra một file `.md` để bạn duyệt. Bước nào lỗi thì tool hỏi
+lại bằng tiếng Việt. Cuối pipeline bạn có **dự án chạy được** + đầy đủ
+spec + test + RRI release-gate report.
+
+**Vì sao cần tool này thay vì gõ thẳng vào ChatGPT?**
+
+| Nếu bạn... | Vấn đề khi gõ thẳng | VibecodeKit giúp |
+|:----------|:--------------------|:-----------------|
+| Mô tả "làm app X" → AI sinh code thẳng | Code lỗi vặt, thiếu test, thiếu spec | Bắt AI làm 8 bước có document trước khi code |
+| Mô tả lại lần 2 | AI quên context, làm lại từ đầu | Lưu blueprint + RRI vào `.md`, AI đọc lại |
+| Muốn kiểm tra UX | "Trông OK" — không có thước đo | RRI-UX gate 7 dimension × 8 stress axes |
+| Muốn tránh lỗi UI hay gặp | Tự nhớ thuộc | Anti-pattern catalog 12 lỗi kèm BAD/GOOD |
+| Cần chọn màu / font | Tốn 30 phút lượn Pinterest | 7 palette + 5 font pair sẵn theo ngành |
+| Lo AI chạy lệnh nguy hiểm | Không kiểm soát được | Permission engine 6-layer chặn `rm -rf /` v.v. |
+
+### 1. Cài đặt 3 bước (~5 phút)
+
+**Yêu cầu:** Python ≥ 3.9 + Git + 1 trong các AI CLI (Claude Code, Cursor,
+ChatGPT web, hoặc Codex CLI).
+
+```bash
+# Bước 1 — tải tool
+git clone https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra.git
+cd vibecodekit-hybrid-ultra
+
+# Bước 2 — chạy demo offline (~2 giây, không cần internet)
+PYTHONPATH=./scripts python3 -m vibecodekit.cli demo
+
+# Bước 3 — verify (không bắt buộc, nhưng đẹp khi pass)
+pytest -q                                          # → 1566 passed
+PYTHONPATH=./scripts python3 -m vibecodekit.conformance_audit
+                                                   # → 96/96 probes met=True
+```
+
+Nếu cả 3 bước OK → tool đã sẵn sàng.
+
+> **Tip cho Claude Code / Cursor:** copy thư mục `update-package/.claude/`
+> vào project của bạn để có sẵn 42 slash command (`/vibe`, `/vibe-scaffold`,
+> `/vck-ship`, v.v.). Xem [`Option 2`](#option-2--install-update-package-into-an-existing-project)
+> bên dưới hoặc đọc [`update-package/README.md`](update-package/README.md).
+
+### 2. Lệnh đầu tiên — chạy pipeline 8 bước
+
+**Cách 1 (đơn giản nhất):** dùng master command `/vibe` với mô tả tự nhiên.
+
+Trong Claude Code / Cursor:
+
+```
+/vibe Tôi muốn làm app quản lý chi tiêu cho gia đình, có web + mobile
+```
+
+Tool sẽ **tự route** câu đó qua intent router → dispatch sang
+`/vibe-scaffold + /vibe-rri + /vibe-vision + …` và đi qua đủ 8 bước.
+
+**Cách 2 (gõ tay từng bước):** xem bảng §3 bên dưới.
+
+### 3. Pipeline 8 bước — mỗi bước 1 dòng
+
+| # | Bước | Để làm gì | Lệnh | Output |
+|:-:|:----|:----------|:-----|:-------|
+| 1 | **Scan** | Đọc repo + docs hiện có | `/vibe-scan` | `runtime/scan/*.md` |
+| 2 | **RRI** | 5 personas hỏi 16 câu để rõ requirement | `/vibe-rri` | `runtime/rri/cycle-*/answers.jsonl` |
+| 3 | **Vision** | Chốt mục tiêu 1 dòng + 3 KPI + non-goals | `/vibe-vision` | `vision.md` |
+| 4 | **Blueprint** | Architecture + data model + interface | `/vibe-blueprint` | `blueprint.md` |
+| 5 | **Task graph** | Chia 5-30 task TIP (Task Instruction Pack) | `/vibe-task graph` | `runtime/tasks/*.json` |
+| 6 | **Build** | Spawn `builder` sub-agent build từng task | `/vibe-subagent builder <tip>` | code thực |
+| 7 | **Verify** | Run RRI-T (test) + RRI-UX (UX) + VN-12 gate | `/vibe-rri-t`, `/vibe-rri-ux`, `/vibe-vn-check` | report `.md` |
+| 8 | **Ship** | Test → review → commit → push → PR → deploy | `/vck-ship`, `/vibe-ship vercel` | PR + preview URL |
+
+Mỗi bước có thể chạy độc lập (gõ slash command trực tiếp) hoặc để
+master `/vibe` tự điều phối.
+
+### 4. 10 lệnh hay dùng nhất
+
+| Lệnh | Dùng khi | Ví dụ |
+|:-----|:--------|:------|
+| `/vibe <mô tả>` | Muốn AI tự đi 8 bước từ mô tả tự nhiên | `/vibe Tôi muốn làm shop online bán giày` |
+| `/vibe-scaffold <preset>/<stack>` | Cần khung dự án sẵn (11 preset × 3 stack) | `/vibe-scaffold saas/nextjs` |
+| `/vibe-doctor` | Health-check tool sau khi cài | `vibe doctor --root .` |
+| `/vibe-audit` | 96 conformance probe (xem code có sạch không) | `vibe audit --threshold 1.0` |
+| `/vibe-permission "<lệnh>"` | Hỏi tool: "lệnh này có an toàn không?" | `vibe permission "rm -rf /" --user-runtime` |
+| `/vibe-memory query <q>` | Tìm trong 3-tier memory (user/project/team) | `vibe memory query "color palette"` |
+| `/vibe-rri-t <jsonl>` | Test release gate 7 dimension × 8 axes | `vibe rri-t tests/touchfiles.json` |
+| `/vibe-rri-ux <jsonl>` | UX release gate (Flow Physics) | `vibe rri-ux ux-flags.json` |
+| `/vck-review` | Adversarial review 7 specialist (security + perf + a11y + ...) | `/vck-review` |
+| `/vck-ship` | Atomic: test → review → qa → commit → push → PR | `/vck-ship` |
+
+### 5. Tính năng chính — mỗi cái 1 đoạn + 1 lệnh demo
+
+#### 5.1. Scaffold engine — 11 preset × 3 stack
+
+11 khung dự án sẵn (`saas` / `landing-page` / `shop-online` / `blog` /
+`dashboard` / `portfolio` / `docs` / `api-todo` / `mobile-app` / `crm` /
+`osint-terminal`) × 3 stack (`nextjs` / `fastapi` / `expo`). Mỗi preset
+có sẵn design tokens (6 màu × dark/light) + sample component (Button /
+Input / Card) + Tailwind config pre-wired.
+
+```bash
+PYTHONPATH=./scripts python3 -m vibecodekit.cli scaffold preview saas/nextjs
+# → liệt 23 file sẽ được sinh + checksum
+```
+
+Chi tiết: [`references/41-component-library-pattern.md`](references/41-component-library-pattern.md),
+[`references/42-osint-terminal-template.md`](references/42-osint-terminal-template.md).
+
+#### 5.2. Permission engine — 6-layer pipeline
+
+Trước khi AI agent chạy bất kỳ shell command nào, tool đi qua 6 layer:
+(1) dangerous-pattern regex → (2) classification (read/write/network/destructive)
+→ (3) mode policy (default/auto_safe/accept_edits/yolo/plan) → (4) escalation
+gate → (5) approval contract → (6) audit log.
+
+```bash
+vibe permission "rm -rf /" --user-runtime
+# → deny (layer 1: dangerous_pattern), exit 2
+
+vibe permission "git status" --user-runtime
+# → allow (default mode), exit 0
+```
+
+`--user-runtime` (v0.25.3+) lưu state về `~/.vibecode/` thay vì `$cwd` —
+tránh pollute working directory. Chi tiết:
+[`references/10-permission-classification.md`](references/10-permission-classification.md).
+
+#### 5.3. Conformance audit — 96 internal probe
+
+Mỗi release chạy 96 probe kiểm tra **architectural invariant** (không
+phải benchmark code-quality ngoài). Probe cover: install pipeline, doc
+parity, mirror surface sync, scaffold integrity, permission engine
+coverage, etc.
+
+```bash
+PYTHONPATH=./scripts python3 -m vibecodekit.conformance_audit --threshold 1.0
+# → parity: 100.00% (96/96, threshold 100%)
+```
+
+Methodology: [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md).
+
+#### 5.4. Doctor — health-check
+
+Kiểm tra 30+ invariant: VERSION mirror sync, scaffold manifest schema,
+references count, hook script exists, MCP server registry, etc.
+
+```bash
+vibe doctor --root .
+# → ✓ 32 checks passed
+```
+
+#### 5.5. Memory hierarchy — 3 tier
+
+- **user**: `~/.vibecode/memory/` (cross-project)
+- **project**: `./.vibecode/memory/` (repo-local)
+- **team**: `./.vibecode/memory/team/` (commit vào repo)
+
+Retrieval lai lexical + embedding (default `hash-256` offline; có thể
+switch sang `sentence-transformers` qua `vibe config set-backend`).
+
+```bash
+vibe memory write user "Tôi thích palette xanh tealmint"
+vibe memory query user "palette"
+# → match score 0.83: "Tôi thích palette xanh tealmint"
+```
+
+#### 5.6. MCP integration — stdio + inproc
+
+Đăng ký MCP server (Model Context Protocol) để expose tool tới Claude /
+Codex. Bundled sample: `vibecodekit.mcp_servers.selfcheck` (tool `ping`,
+`echo`, `now`).
+
+```bash
+vibe mcp register selfcheck \
+  --transport inproc --module vibecodekit.mcp_servers.selfcheck
+vibe mcp tools selfcheck
+# → ping, echo, now
+```
+
+#### 5.7. Intent router — natural-language dispatch
+
+Master `/vibe <prose>` route câu của bạn (cả tiếng Anh + tiếng Việt) vào
+1 trong 8 verb (`scan / plan / build / review / qa / ship / audit /
+doctor`) hoặc 1 trong 11 scaffold preset.
+
+```bash
+vibe intent route "tôi muốn làm trang điều khiển OSINT"
+# → preset=osint-terminal, verb=BUILD, locale=vi
+```
+
+Benchmark hiện tại: set-inclusion accuracy 0.9808 (xem
+`benchmarks/intent_router_0.25.3.json`).
+
+#### 5.8. Hooks — 33 lifecycle event
+
+4 hook script trong `.claw/hooks/` chặn pattern nguy hiểm, redact secret,
+trigger pre-compact, init session. Cover 33 event group: tool (3) +
+permission (2) + session (3) + agent (3) + task (4) + context (3) +
+filesystem (4) + UI/config (5) + query legacy (6).
+
+#### 5.9. Sub-agent — 7 role ACL-enforced
+
+`coordinator / scout / builder / qa / security / reviewer / qa-lead` —
+mỗi role có ACL trong `subagent_runtime.PROFILES`. Read-only role
+(coordinator, scout, qa, security, reviewer, qa-lead) **không thể** ghi
+file (`can_mutate=False`).
+
+```bash
+vibe subagent spawn builder "Implement /api/expense POST endpoint"
+```
+
+#### 5.10. RRI — Reverse Requirements Interview
+
+5 personas (PM / engineer / designer / QA / ops) × 3 mode (CHALLENGE /
+GUIDED / EXPLORE) hỏi tới 16 câu để clarify requirement. Question bank
+trong `assets/rri-question-bank.json` (schema 1.2.0, 12 project-type
+buckets).
+
+```bash
+vibe rri start --mode CHALLENGE --project-type saas
+```
+
+3 flavor release-gate: RRI-T (testing 7 dim × 8 axes), RRI-UX (Flow
+Physics), RRI-UI (design pipeline 4-phase).
+
+### 6. Worked example A → Z
+
+Có sẵn 1 worked example đầy đủ trong
+[`docs/GUIDE_NONTECH_BEGINNER.md` §4](docs/GUIDE_NONTECH_BEGINNER.md):
+**"App quản lý chi tiêu gia đình"** — từ mô tả 1 dòng tới sản phẩm
+deploy lên Vercel, đi qua hết 8 bước, tổng thời gian ~45 phút.
+
+### 7. Xử lý 5 lỗi hay gặp
+
+| Lỗi | Nguyên nhân | Sửa |
+|:----|:-----------|:----|
+| `pytest` báo `ModuleNotFoundError: No module named 'tests'` | Repo cũ trước v0.25.3 | Update lên `v0.25.3+` (fix qua `pythonpath = ["."]`) hoặc tạm dùng `PYTHONPATH=. pytest` |
+| `vibe permission` để lại `.vibecode/runtime/denials.json` trong `$cwd` | Quên cờ `--user-runtime` | Dùng `vibe permission "<cmd>" --user-runtime` để state về `~/.vibecode/` |
+| `pip3 install ...` báo `externally-managed-environment` | Python system protected (PEP 668) | `python3 -m venv .venv && source .venv/bin/activate && pip install ...` |
+| Tool không hiểu mô tả tiếng Việt | Intent router cần keyword cụ thể (xem `references/00-overview.md` §intent) | Thêm từ khoá scaffold: "tôi muốn làm **app saas**…" hoặc "**trang điều khiển**…" |
+| CLI báo `command not found: vibe` | `pip install -e .` chưa chạy | Hoặc `pip install -e .` hoặc dùng `PYTHONPATH=./scripts python3 -m vibecodekit.cli <subcmd>` |
+
+### 8. Đi sâu hơn
+
+| Tài liệu | Khi nào đọc | Độ dài |
+|:---------|:-----------|:------:|
+| [`docs/GUIDE_NONTECH_BEGINNER.md`](docs/GUIDE_NONTECH_BEGINNER.md) | Người không phải dev, muốn worked-example A→Z | ~20 phút |
+| [`QUICKSTART.md`](QUICKSTART.md) | Đã quen pipeline, cần 5-min refresher | 5 phút |
+| [`USAGE_GUIDE.md`](USAGE_GUIDE.md) | Reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe | ~60 phút |
+| [`SKILL.md`](SKILL.md) | Cài làm Claude/Cursor skill | 5 phút |
+| [`references/00-overview.md`](references/00-overview.md) | Hiểu architecture + design decision | ~30 phút |
+| [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) | Hiểu "96 probe" thực sự đo gì | 10 phút |
+| [`CHANGELOG.md`](CHANGELOG.md) | Lịch sử release + breaking change | tra cứu |
+
+---
+
 ## Skills inspired by gstack
 
 The `/vck-*` slash commands + Python browser daemon are adapted —
