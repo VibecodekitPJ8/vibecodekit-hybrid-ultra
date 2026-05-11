@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -63,9 +64,15 @@ def step_1_scan(target: Path) -> None:
     sub(f"  target has {len(existing)} entries (clean slate OK)")
 
     sub("Running `vibe doctor --root <REPO_ROOT>` invariant check ...")
+    # Extend (don't replace) the parent env so HOME / LANG / PATH / TMPDIR /
+    # locale all flow through to the child process. Replacing env entirely
+    # would silently break any future doctor check that calls Path.home(),
+    # expanduser("~"), locale.getpreferredencoding(), or spawns its own
+    # subprocess needing PATH.
+    child_env = {**os.environ, "PYTHONPATH": str(REPO_ROOT / "scripts")}
     proc = subprocess.run(
         [sys.executable, "-m", "vibecodekit.cli", "doctor", "--root", str(REPO_ROOT)],
-        env={"PYTHONPATH": str(REPO_ROOT / "scripts"), "PATH": ""},
+        env=child_env,
         capture_output=True,
         text=True,
         check=False,
@@ -270,8 +277,9 @@ def main() -> int:
     )
     parser.add_argument(
         "--keep",
-        action="store_true",
-        help="keep target directory after demo (default: keep; --no-keep to wipe)",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="keep target directory after demo (default: --keep; pass --no-keep to wipe)",
     )
     args = parser.parse_args()
 
@@ -305,6 +313,10 @@ def main() -> int:
     print("    • Edit `scaffold/` to match the family-expense blueprint")
     print("    • Run `pytest scaffold/tests/` to validate REQ-* coverage")
     print("    • Open a PR with the resulting tree")
+
+    if not args.keep:
+        shutil.rmtree(target, ignore_errors=True)
+        print(f"\n  --no-keep: wiped {target}")
 
     return 0
 
