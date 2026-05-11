@@ -1,9 +1,9 @@
-# claw-code-pack (VibecodeKit Hybrid Ultra v0.25.3)
+# claw-code-pack (VibecodeKit Hybrid Ultra v0.25.4)
 
 Drop-in overlay for projects that use `claw-code` / Claude Code / Codex.
 After extracting into your project root you'll have:
 
-- `.claude/commands/` — **42 slash commands** at v0.25.3: 25 `/vibe-*` + 1 master `/vibe`
+- `.claude/commands/` — **42 slash commands** at v0.25.4: 25 `/vibe-*` + 1 master `/vibe`
   (`/vibe`, `/vibe-scaffold`, `/vibe-ship`, `/vibe-run`, `/vibe-doctor`,
   `/vibe-subagent`, `/vibe-memory`, `/vibe-approval`, `/vibe-task`,
   `/vibe-scan`, `/vibe-vision`, `/vibe-rri`, `/vibe-rri-t`, `/vibe-rri-ux`,
@@ -87,5 +87,5 @@ worked example "App quản lý chi tiêu" A→Z, ~20 phút đọc):
 - [`README.md` §🇻🇳 Hướng dẫn tiếng Việt](../README.md#-hướng-dẫn-tiếng-việt--từ-a--z-cho-người-mới) — comprehensive cheatsheet
 - [`USAGE_GUIDE.md`](USAGE_GUIDE.md) — reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe
 
-> **Lưu ý v0.25.3+:** Khi chạy `vibe permission` demo nên thêm cờ
+> **Lưu ý (since v0.25.3 — xem `CHANGELOG.md`):** Khi chạy `vibe permission` demo nên thêm cờ
 > `--user-runtime` để state lưu về `~/.vibecode/` thay vì pollute project.

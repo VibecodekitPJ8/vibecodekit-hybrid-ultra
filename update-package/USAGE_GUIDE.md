@@ -1,10 +1,10 @@
-# VibecodeKit Hybrid Ultra — Hướng dẫn sử dụng chi tiết (v0.25.3)
+# VibecodeKit Hybrid Ultra — Hướng dẫn sử dụng chi tiết (v0.25.4)
 
 Bộ kit đầy đủ để build dự án theo phương pháp **VIBECODE-MASTER** với **Full
-Agentic OS** runtime (96 internal conformance probes at v0.25.3 — self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`; all
+Agentic OS** runtime (96 internal conformance probes at v0.25.4 — self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`; all
 actionable tests pass từ repo root; bundled `tests/` trong skill zip chứa
 một subset đại diện để user smoke-test sau khi extract — xem §15.10).
-Bản này ứng với **v0.25.3** (hiện hành — xem `CHANGELOG.md` cho
+Bản này ứng với **v0.25.4** (hiện hành — xem `CHANGELOG.md` cho
 lịch sử các bản trước, mỗi entry kèm link PR + finding khoá lại):
 
 - **v0.16.1** — doc coherence + recheck cleanup (PR #16, this release)
@@ -369,7 +369,7 @@ slash command trong `.claude/commands/` sẵn sàng.
 | `/vibe-rri-ui` | Bước 7 — pipeline 4-phase cho UI. |
 | `/vibe-verify` | Đóng báo cáo verify. |
 | `/vibe-complete` | Completion Report. |
-| `/vibe-audit` | Chạy 96 conformance probes (at v0.25.3). |
+| `/vibe-audit` | Chạy 96 conformance probes (at v0.25.4). |
 | `/vibe-doctor` | Chẩn đoán sức khỏe cài đặt. |
 | `/vibe-dashboard` | Dashboard runtime. |
 | `/vibe-permission <cmd>` | Hỏi permission engine có allow lệnh không. |
@@ -969,7 +969,7 @@ File HTML tự-chứa (không framework, không network), nhúng full JSON summa
 # Lifecycle
 vibe doctor                       # health check
 vibe dashboard                    # runtime dashboard
-vibe audit --threshold 0.85       # 96 probes at v0.25.3 (canonical count grows per release)
+vibe audit --threshold 0.85       # 96 probes at v0.25.4 (canonical count grows per release)
 vibe install <destination>        # cài overlay vào project
 vibe compact [--reactive]         # layer 4/5 compaction
 
@@ -1274,7 +1274,7 @@ vibe permission "rm -rf /" --user-runtime          # state → ~/.vibecode/ thay
 ```
 
 `--mode` ∈ `{default, auto_safe, accept_edits, yolo}` (xem §24).
-`--user-runtime` (v0.25.3+) redirects DenialStore state về `~/.vibecode/runtime/`
+`--user-runtime` (xem `CHANGELOG.md` cho release ship) redirects DenialStore state về `~/.vibecode/runtime/`
 thay vì `$cwd/.vibecode/runtime/` — recommended cho ad-hoc CLI demos để tránh
 pollute working directory với `denials.json` / `denials.lock`.
 

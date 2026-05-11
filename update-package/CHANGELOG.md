@@ -12,6 +12,66 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.25.4] — 2026-05-05
+
+Cycle 20 + 21 wrap-up — **clean release artifact bundling Devin-session
+enablement (skill + demo + new-session guide) and final audit drift
+cleanup**.
+
+No new features, no breaking changes — this release rolls up PR #30 +
+#31 + #32 (cycle 20) into a single tagged artifact so downstream
+consumers (PyPI, skill-zip, devin-session-init) pin to v0.25.4 rather
+than the floating tip of `main`.
+
+Full rationale + per-PR commit map live in
+[`RELEASE_NOTES_v0.25.4.md`](../RELEASE_NOTES_v0.25.4.md).
+
+### Added (cycle 20)
+
+- **`.devin/skills/build-with-vibecodekit/SKILL.md`** (PR #30) — Devin
+  session skill (~200 lines) auto-discovered when a Devin session is
+  started in this repo.
+- **`examples/devin_pipeline_demo.py`** (PR #30) — programmatic 8-step
+  walkthrough (~280 lines), generates ~20 file artefacts offline.
+- **`README.md` §9 — "Dùng tool với Devin session mới"** (PR #32,
+  ~150 lines) — bilingual onboarding + 10 prompt examples by project
+  type + workflow timeline + Q&A.
+- **`docs/DEVIN_NEW_SESSION_GUIDE.md`** (PR #32, ~400 lines) — deep-dive
+  companion to README §9.
+
+### Fixed (cycle 20)
+
+- **`examples/devin_pipeline_demo.py` — `--keep` flag dead code** (PR
+  #31) — switched to `argparse.BooleanOptionalAction`, added cleanup
+  logic at end of `main()`.
+- **`examples/devin_pipeline_demo.py` — subprocess env stripping**
+  (PR #31) — `child_env = {**os.environ, "PYTHONPATH": ...}` instead of
+  replacing parent env.
+
+### Fixed (cycle 21 — audit drift)
+
+- **`scripts/vibecodekit/conformance/_registry.py:3`** (PR #32) —
+  module docstring "92 conformance probes" expanded to mention cycle 16
+  PR-E1 bump to 96.
+- **`USAGE_GUIDE.md` + `update-package/USAGE_GUIDE.md`** (PR #32) —
+  "Tham khảo §23 cho catalog đầy đủ 87 probe" → "96 probe".
+- **`tests/test_content_depth.py:259-264`** (PR #32) — "All 9 scaffold
+  presets ship" comment + 10-entry tuple → "11 presets" + included
+  `osint-terminal`; closes regression coverage gap.
+
+### Tag
+
+`v0.25.4` annotated tag from `main` HEAD post-merge of PR-J1.
+
+### Audit gates at v0.25.4
+
+```
+pytest                → 1566 passed, 9 skipped
+ruff check .          → All checks passed
+audit                 → 96/96 met=True parity=1.0000
+mypy --strict 9 core  → Success: no issues found in 9 source files
+```
+
 ## [0.25.3] — 2026-05-01
 
 Cycle 18 PR-G1 — **2 non-blocking UX/DX issues from v0.25.2 audit**.
