@@ -279,6 +279,17 @@ Có sẵn 1 worked example đầy đủ trong
 **"App quản lý chi tiêu gia đình"** — từ mô tả 1 dòng tới sản phẩm
 deploy lên Vercel, đi qua hết 8 bước, tổng thời gian ~45 phút.
 
+**Dùng Devin?** Chạy programmatic walkthrough 8 bước trong 1 lệnh:
+
+```bash
+PYTHONPATH=./scripts python examples/devin_pipeline_demo.py \
+    --target /tmp/myproject
+```
+
+Demo sinh 20 file (vision.md, blueprint.md, 4 TIP, scaffold api-todo
+fastapi, RRI answers, RRI-T touchfiles) — không cần Claude Code, không
+cần network. Skill cho Devin session: [`.devin/skills/build-with-vibecodekit/SKILL.md`](.devin/skills/build-with-vibecodekit/SKILL.md).
+
 ### 7. Xử lý 5 lỗi hay gặp
 
 | Lỗi | Nguyên nhân | Sửa |

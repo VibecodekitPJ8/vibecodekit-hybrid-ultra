@@ -21,6 +21,7 @@ PYTHONPATH=./scripts python examples/05_vn_error_translator.py
 PYTHONPATH=./scripts python examples/06_quality_gate.py
 PYTHONPATH=./scripts python examples/07_tool_use_parser.py
 PYTHONPATH=./scripts python examples/08_worktree_executor.py
+PYTHONPATH=./scripts python examples/devin_pipeline_demo.py --target /tmp/myproject
 ```
 
 ## What each example does
@@ -35,6 +36,7 @@ PYTHONPATH=./scripts python examples/08_worktree_executor.py
 | `06_quality_gate.py` | Run the 7-dimension × 8-axis release gate on a sample scorecard (PASS + FAIL scenario) |
 | `07_tool_use_parser.py` | Parse 3 ad-hoc tool-use formats (JSON array, single ``<tool>`` tag, mixed prose) |
 | `08_worktree_executor.py` | Spawn an isolated git worktree (Pattern #8) on a temp repo, then clean up |
+| `devin_pipeline_demo.py` | End-to-end programmatic walkthrough of the VIBECODE-MASTER v5 8-step pipeline (scan → RRI → vision → blueprint → task graph → build → verify → ship). Designed for Devin sessions that drive the pipeline through the Python CLI instead of Claude Code slash commands. See [`.devin/skills/build-with-vibecodekit/SKILL.md`](../.devin/skills/build-with-vibecodekit/SKILL.md). |
 
 ## All-in-one demo
 
@@ -42,7 +44,7 @@ PYTHONPATH=./scripts python examples/08_worktree_executor.py
 
 1. **Doctor** — health-check the project layout
 2. **Permission Engine** — classify 5 commands (allow/deny)
-3. **Conformance Audit** — run 87 internal regression probes
+3. **Conformance Audit** — run 96 internal regression probes
 4. **Scaffold Preview** — preview the `api-todo` preset
 5. **Intent Router** — classify 3 free-form phrases to slash commands
 6. **MCP Selfcheck** — ping the bundled MCP server
