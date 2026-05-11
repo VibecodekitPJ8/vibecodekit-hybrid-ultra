@@ -305,12 +305,153 @@ cần network. Skill cho Devin session: [`.devin/skills/build-with-vibecodekit/S
 | Tài liệu | Khi nào đọc | Độ dài |
 |:---------|:-----------|:------:|
 | [`docs/GUIDE_NONTECH_BEGINNER.md`](docs/GUIDE_NONTECH_BEGINNER.md) | Người không phải dev, muốn worked-example A→Z | ~20 phút |
+| [`docs/DEVIN_NEW_SESSION_GUIDE.md`](docs/DEVIN_NEW_SESSION_GUIDE.md) | Dùng Devin để build project end-to-end (xem §9 bên dưới) | ~15 phút |
 | [`QUICKSTART.md`](QUICKSTART.md) | Đã quen pipeline, cần 5-min refresher | 5 phút |
 | [`USAGE_GUIDE.md`](USAGE_GUIDE.md) | Reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe | ~60 phút |
 | [`SKILL.md`](SKILL.md) | Cài làm Claude/Cursor skill | 5 phút |
+| [`.devin/skills/build-with-vibecodekit/SKILL.md`](.devin/skills/build-with-vibecodekit/SKILL.md) | Skill cho Devin session (auto-load) | 5 phút |
 | [`references/00-overview.md`](references/00-overview.md) | Hiểu architecture + design decision | ~30 phút |
 | [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) | Hiểu "96 probe" thực sự đo gì | 10 phút |
 | [`CHANGELOG.md`](CHANGELOG.md) | Lịch sử release + breaking change | tra cứu |
+
+### 9. Dùng tool với Devin session mới — paste link repo + 1 prompt
+
+Section này dành cho user muốn **dùng [Devin](https://app.devin.ai)** thay cho Claude Code / Cursor để build project end-to-end qua pipeline 8 bước của VibecodeKit. Toàn bộ workflow: paste link repo này + 1 prompt mô tả project → Devin tự clone, tự load skill `.devin/skills/build-with-vibecodekit/SKILL.md`, tự drive 8 bước qua Python CLI (không cần slash command, không cần Claude/Cursor).
+
+#### 9.1. Khi nào dùng Devin thay cho Claude Code / Cursor?
+
+| Tiêu chí | Devin | Claude Code / Cursor |
+|:---------|:-----:|:--------------------:|
+| Chạy autonomous nhiều giờ liền (overnight build, batch task) | ✓✓ | ✗ |
+| Có VM cloud riêng (PR tự push, server tự deploy) | ✓ | ✗ (chỉ local) |
+| Slash command UX (`/vibe-scan`, `/vck-ship`, …) | gián tiếp (đọc markdown làm prompt template) | ✓ trực tiếp |
+| Test browser end-to-end (Playwright + real Chrome) | ✓✓ | ✗ |
+| Cần Python + git auth có sẵn | ✓ (auth proxied) | dev tự cài |
+| Phù hợp scope task | medium-large project, multi-step | small change, single-file edit |
+
+→ Devin tốt nhất cho: **build project mới từ đầu**, **deep audit + refactor**, **end-to-end test có browser**, **chạy đêm tự deploy**. Claude/Cursor tốt nhất cho: **iterative single-file edit**, **rapid prototyping với UX feedback ngay lập tức**.
+
+#### 9.2. Prompt template (paste vào Devin session mới)
+
+```
+Tôi muốn build [LOẠI PROJECT] dùng VibecodeKit Hybrid Ultra.
+
+Repo tool: https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra
+
+Yêu cầu:
+1. Clone repo trên vào /home/ubuntu/repos/
+2. Đọc và load skill .devin/skills/build-with-vibecodekit/SKILL.md
+3. Chạy pipeline 8 bước (scan → RRI → vision → blueprint → task graph →
+   build → verify → ship) cho project sau:
+
+   [MÔ TẢ PROJECT 2-3 CÂU — gồm goal, user, stack ưu tiên]
+
+4. Mỗi bước báo lại kết quả + chờ tôi confirm trước khi sang bước sau.
+5. Build xong push PR vào branch riêng + chia sẻ link preview deploy.
+```
+
+**Ví dụ điền:**
+
+```
+Tôi muốn build SaaS landing-page "tích kim cương loyalty cho cafe" dùng
+VibecodeKit Hybrid Ultra.
+
+Repo tool: https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra
+
+Yêu cầu:
+1. Clone repo trên vào /home/ubuntu/repos/
+2. Đọc và load skill .devin/skills/build-with-vibecodekit/SKILL.md
+3. Chạy pipeline 8 bước cho project sau:
+
+   Web app cho chuỗi cafe nhỏ (3-10 chi nhánh), nhân viên scan QR khách
+   mỗi lần khách order, sau N lần thì khách đổi thưởng. Stack ưu tiên
+   Next.js 15 + Supabase. Mục tiêu deploy Vercel preview trong < 2h.
+
+4. Mỗi bước báo lại + chờ tôi confirm.
+5. Push PR + link preview Vercel.
+```
+
+#### 9.3. Workflow Devin sẽ chạy (timeline 5 phase, ~30-90 phút tuỳ scope)
+
+| Phase | Bước | Devin action | Expected output | Có cần user OK? |
+|:-----:|:-----|:-------------|:----------------|:---------------:|
+| **Setup** (5 min) | 0 | `git clone https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra.git` + verify `python examples/devin_pipeline_demo.py --no-keep` chạy được | demo exit 0, 8 step pass | ✗ |
+| **Discover** (10 min) | 1 SCAN | `vibe doctor --root <target>` + đọc README user paste | doctor exit=0 + 1-line health summary | ✗ |
+| **Discover** (10 min) | 2 RRI | Đọc `assets/rri-question-bank.json`, sinh 5 câu hỏi cho user theo project_type | 5 câu hỏi tóm tắt | ✓ (user trả lời 5 câu) |
+| **Plan** (10 min) | 3 VISION | Tổng hợp answers → write `vision.md` (goal + 3 KPI + non-goal) | `vision.md` ~50 dòng | ✓ (confirm goal đúng) |
+| **Plan** (10 min) | 4 BLUEPRINT | Write `blueprint.md` (architecture + REQ-* matrix + 4-5 TIP) | `blueprint.md` ~150 dòng | ✓ (confirm scope) |
+| **Build** (20-60 min) | 5 TASK GRAPH | `vibe task graph blueprint.md` → DAG 4-5 node | `task-graph.json` | ✗ |
+| **Build** (20-60 min) | 6 BUILD | `vibe scaffold apply <preset> <stack>` → loop sub-agent builder qua mỗi TIP | scaffold files + diff per TIP | ✓ (review từng TIP) |
+| **Ship** (10 min) | 7 VERIFY | `vibe rri-t` + `vibe audit` + `vibe vn-check` (nếu VN scope) + `pytest` | gate PASS hết | ✗ |
+| **Ship** (10 min) | 8 SHIP | `git commit + push + gh pr create` + (option) `vibe ship vercel` | PR link + preview URL | ✗ (sau khi user gật bước 6) |
+
+#### 9.4. 10 prompt mẫu sẵn cho 10 loại project
+
+| # | Project type | Mô tả ngắn paste vào prompt |
+|:-:|:-------------|:----------------------------|
+| 1 | **SaaS landing** | "Landing page cho [service]. Goal capture email + 1 CTA. Next.js + Tailwind. Deploy Vercel preview." |
+| 2 | **Blog** | "Blog cá nhân + RSS + sitemap. Mỗi bài MDX. Stack Next.js. Theme: minimal serif." |
+| 3 | **API service** | "API thuần FastAPI cho [domain]. SQLite, 4 endpoint CRUD, OpenAPI auto. Deploy Fly.io." |
+| 4 | **Dashboard** | "Internal dashboard cho [team]. Table + chart + auth. Stack Next.js + Recharts + Supabase." |
+| 5 | **OSINT terminal** | "Terminal-UI single-page cho [investigation]. Theme cyan-on-black. Stack Next.js + xterm.js." |
+| 6 | **Mobile app** | "Expo React Native app cho [use case]. 3 screen + AsyncStorage local. Build preview qua EAS." |
+| 7 | **Portfolio** | "Portfolio dev/designer. About + Projects (CMS) + Contact. Stack Astro. Deploy Cloudflare Pages." |
+| 8 | **Docs site** | "Docs site cho [library]. Search + dark mode + i18n vi/en. Stack Docusaurus hoặc Nextra." |
+| 9 | **CRM** | "Mini CRM cho [SMB]. Lead + contact + activity log. Auth + role admin/agent. Stack Next.js + Postgres." |
+| 10 | **Shop online** | "Shop e-commerce nhỏ (< 50 SKU). Cart + checkout Stripe. Stack Next.js + Vercel." |
+
+Mỗi prompt mẫu khớp 1 scaffold preset có sẵn trong `assets/scaffolds/` — Devin sẽ tự pick preset đúng ở bước 6 BUILD (xem `vibe scaffold list`).
+
+#### 9.5. Cơ chế Devin auto-discover skill
+
+Khi Devin session khởi động trong repo, nó tự scan thư mục `.devin/skills/` ở root. Mỗi sub-folder có `SKILL.md` với YAML frontmatter sẽ được parse + đăng ký vào skill registry. User prompt mention keyword (`vibecodekit`, `/vibe`, `vck-ship`, `8-step pipeline`, …) → Devin matching skill rồi auto-invoke trước khi response.
+
+Verify skill load đúng (chạy trong session):
+
+```
+session> "Bạn có skill nào liên quan vibecodekit không?"
+Devin>   "Có skill build-with-vibecodekit ở .devin/skills/. Khi user
+          mention pipeline / scaffold / audit / vibe-*, mình sẽ chạy
+          theo 8 bước được document trong SKILL.md."
+```
+
+#### 9.6. Q&A nhanh
+
+| Q | A |
+|:--|:--|
+| Devin có cần install Python không? | Không — VM Devin đã có Python 3.9+ + git. Repo có `requires-python = ">=3.9"`. |
+| Có cần Claude Code / Cursor không? | Không — pipeline 8 bước drive được 100% qua Python CLI. Slash command markdown chỉ là **prompt template** Devin đọc, không phải dependency. |
+| Devin cần secret/credential gì? | Mặc định không cần. Nếu deploy: `VERCEL_TOKEN` / `FLY_API_TOKEN` / etc. Nếu test browser: không cần. Nếu MCP: tuỳ MCP server. |
+| Có miễn phí không? | Tool VibecodeKit MIT free. Devin tính phí session theo plan riêng — xem [docs.devin.ai](https://docs.devin.ai). |
+| Devin có thể chạy đêm tự build không? | Có. Skill document workflow async + user OK gate ở bước 3/4/6. Devin sẽ pause + ping khi cần input. |
+| Bug Devin báo không match codebase? | Reproducer: paste lệnh `vibe doctor` output + step Devin đang stuck. Devin sẽ tự `git diff` + report. |
+
+#### 9.7. Khi nào Devin escalate hỏi user
+
+Skill `.devin/skills/build-with-vibecodekit/SKILL.md` mặc định ACL:
+
+| Lệnh | Tự chạy | Hỏi user |
+|:-----|:-------:|:--------:|
+| `vibe scan` / `doctor` / `audit` (read-only) | ✓ | ✗ |
+| `vibe scaffold apply` (vào dir mới) | ✓ | ✗ |
+| `vibe scaffold apply` (overwrite dir đã có file) | ✗ | ✓ (force) |
+| `git push --force` / `git reset --hard` | ✗ | ✓ |
+| `rm -rf` / `sudo` / `curl | sh` | ✗ | ✓ chỉ-explicit |
+| `vibe ship --prod` (deploy production) | ✗ | ✓ (luôn) |
+| Test có audit-trail lock (`test_canonical_org_no_bypass.py`) | ✗ | ✓ |
+
+Khi Devin escalate, user nhận message + có thể click button "Approve" / "Deny" / "Skip" trong webapp.
+
+**Bonus: chạy demo trước khi build thật**
+
+Trước khi giao project thật cho Devin, có thể chạy demo end-to-end 8 bước trong < 30 giây để verify tool hoạt động:
+
+```bash
+PYTHONPATH=./scripts python examples/devin_pipeline_demo.py \
+    --target /tmp/devin-demo --no-keep
+```
+
+Output sẽ in 8 banner step + ~20 artefact, exit 0 nếu tool healthy. Xem [`docs/DEVIN_NEW_SESSION_GUIDE.md`](docs/DEVIN_NEW_SESSION_GUIDE.md) để hiểu sâu hơn về từng bước.
 
 ---
 

@@ -256,10 +256,10 @@ def test_install_manifest_ships_runtime_data():
     assert any("assets/scaffolds/docs/manifest.json" in d for d in dests), (
         "install_manifest must ship docs scaffold so scaffold_engine "
         "finds it in installed projects")
-    # All 9 scaffold presets ship.
+    # All 11 scaffold presets ship.
     for preset in ("landing-page", "saas", "portfolio", "docs",
                    "blog", "dashboard", "shop-online", "mobile-app",
-                   "api-todo", "crm"):
+                   "api-todo", "crm", "osint-terminal"):
         assert any(f"assets/scaffolds/{preset}/" in d for d in dests), (
             f"install_manifest missing scaffold preset: {preset}")
 
