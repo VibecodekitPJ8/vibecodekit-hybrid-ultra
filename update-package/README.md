@@ -61,3 +61,31 @@ Lịch sử các milestone (v0.11.x / v0.15.x / v0.16.x) được giữ trong `C
 
 See `ai-rules/vibecodekit/SKILL.md`, `ai-rules/vibecodekit/references/00-overview.md`
 and `CLAUDE.md` for the complete methodology reference.
+
+---
+
+## 🇻🇳 Hướng dẫn tiếng Việt nhanh (sau khi cài update-package)
+
+Sau khi extract update-package vào project, bạn có 42 slash command sẵn
+trong `.claude/commands/`. Lệnh hay dùng:
+
+| Lệnh | Để làm gì |
+|:-----|:----------|
+| `/vibe <mô tả>` | Master router — AI tự đi qua 8 bước pipeline từ mô tả tự nhiên |
+| `/vibe-scaffold <preset>/<stack>` | Sinh khung dự án (11 preset × 3 stack) |
+| `/vibe-doctor` | Health-check overlay đã cài đúng chưa |
+| `/vibe-audit` | 96 conformance probe (regression guard) |
+| `/vibe-permission "<cmd>"` | Hỏi: lệnh shell này có an toàn không (6-layer pipeline) |
+| `/vck-ship` | Atomic: test → review → qa → commit → push → PR |
+| `/vck-review` | Adversarial review 7 specialist |
+
+**Pipeline 8 bước:** scan → RRI → vision → blueprint → task graph →
+build → verify → ship. Đầy đủ hướng dẫn tiếng Việt cho người mới (kèm
+worked example "App quản lý chi tiêu" A→Z, ~20 phút đọc):
+
+- [`docs/GUIDE_NONTECH_BEGINNER.md`](../docs/GUIDE_NONTECH_BEGINNER.md) — A→Z cho người không phải dev
+- [`README.md` §🇻🇳 Hướng dẫn tiếng Việt](../README.md#-hướng-dẫn-tiếng-việt--từ-a--z-cho-người-mới) — comprehensive cheatsheet
+- [`USAGE_GUIDE.md`](USAGE_GUIDE.md) — reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe
+
+> **Lưu ý v0.25.3+:** Khi chạy `vibe permission` demo nên thêm cờ
+> `--user-runtime` để state lưu về `~/.vibecode/` thay vì pollute project.
