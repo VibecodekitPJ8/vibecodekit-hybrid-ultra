@@ -1234,7 +1234,7 @@ vibe audit --json                   # raw envelope
 vibe audit --probe 85_no_orphan_module   # chạy đúng 1 probe
 ```
 
-Tham khảo §23 cho catalog đầy đủ 87 probe.
+Tham khảo §23 cho catalog đầy đủ 96 probe.
 
 #### 19.4 `vibe install <destination>`
 

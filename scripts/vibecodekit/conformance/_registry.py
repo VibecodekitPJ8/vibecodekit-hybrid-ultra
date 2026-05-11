@@ -1,6 +1,7 @@
 """Decorator-based probe registry.
 
-Source of truth for the 92 conformance probes since cycle 14 PR β-6.
+Source of truth for the 96 conformance probes (since cycle 14 PR β-6;
+extended to 93 in cycle 15, 96 in cycle 16 PR-E1).
 Each ``probes_*.py`` module decorates its functions with ``@probe(id,
 group=...)``; the decorator appends them to the module-global
 ``_REGISTRY`` list at import time.  ``conformance_audit.PROBES``
