@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "vibecodekit-hybrid-ultra"
-version = "0.25.2"
+version = "0.25.3"
 description = "Defensive, audit-driven runtime + skill bundle for AI-assisted coding workflows. VIBECODE-MASTER methodology + RRI question banks + permission engine + scaffold engine (11 presets) + 96-probe conformance audit + sub-second browser daemon."
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -70,6 +70,13 @@ include = ["vibecodekit*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# v0.25.3: thêm `.` (repo root) vào sys.path để pytest discover được
+# `tests` như một package — 2 test (`test_no_further_rebrands.py` + 
+# `test_canonical_org_no_bypass.py`) import `from tests.X import Y` 
+# để re-export `ALLOWED_ORGS`.  Trước đây dev env phải set 
+# `PYTHONPATH=.` thủ công hoặc chạy `pip install -e .`; bây giờ 
+# `pytest` standalone từ repo root chạy được.
+pythonpath = ["."]
 addopts = "-q"
 markers = [
     "browser: requires the [browser] optional extras (playwright, fastapi, uvicorn).",

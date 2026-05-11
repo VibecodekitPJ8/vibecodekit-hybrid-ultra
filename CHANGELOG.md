@@ -12,6 +12,76 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.25.3] — 2026-05-01
+
+Cycle 18 PR-G1 — **2 non-blocking UX/DX issues from v0.25.2 audit**.
+
+Two latent issues observed during the v0.25.2 release audit but
+deferred as non-blocking are now fixed in this patch release.  Full
+rationale + reproduction steps live in
+[`RELEASE_NOTES_v0.25.3.md`](RELEASE_NOTES_v0.25.3.md).
+
+### Fix 1 — pytest discovery without `PYTHONPATH=.`
+
+Two tests (`test_no_further_rebrands.py` + `test_canonical_org_no_bypass.py`)
+import `from tests.X import Y` to re-export shared `ALLOWED_ORGS`
+constants.  Without `tests/__init__.py` they failed to collect under a
+plain `pytest` invocation — devs had to set `PYTHONPATH=.` or
+`pip install -e .` first, hurting onboarding.
+
+**Fix:** added `pythonpath = ["."]` to `[tool.pytest.ini_options]` in
+`pyproject.toml`.  Now `pytest` standalone collects all 1566 tests
+without manual sys.path tweaks.
+
+### Fix 2 — `vibe permission` no longer pollutes `$cwd` by default
+
+Running QUICKSTART.md §3 example
+(`python -m vibecodekit.cli permission "rm -rf /"`) from repo root
+wrote `DenialStore` state into the in-tree
+`.vibecode/runtime/denials.json` + `.lock`.  Anyone who then `git add -A`
+would accidentally commit polluted state (which actually happened in
+PR-F5 and required the PR-F6 hot-fix).
+
+**Fix:** added `--user-runtime` flag to `vibe permission` that
+redirects `DenialStore` root from `$cwd` to `~/.vibecode/` (semantically
+correct — denial state tracks **user** behaviour, not per-project).
+Falls back to `.` if `$HOME` not writable.  QUICKSTART examples updated
+to use the flag.
+
+```bash
+# default — state in $cwd/.vibecode/runtime/ (project-local)
+vibe permission "rm -rf /"
+
+# v0.25.3+ — state in ~/.vibecode/runtime/ (user-scoped, recommended for demos)
+vibe permission "rm -rf /" --user-runtime
+```
+
+### Bookkeeping
+
+- **`.gitignore`** — explicitly ignore `.vibecode/runtime/denials.json`
+  + `.lock` so a future copy of the v0.25.2 pollution incident cannot
+  recur via `git add -A`.
+- **5 new tests** in `tests/test_cli_permission_user_runtime.py`
+  covering default behaviour, `--user-runtime` flag, helper unit tests
+  (writable home + read-only home fallback), pytest collection sanity.
+- **VERSION 0.25.2 → 0.25.3** + sync_version (8 mirror surfaces) +
+  6 `tokens.json` regenerated + new `benchmarks/intent_router_0.25.3.json`
+  (set-incl 0.9808 unchanged — intent router unaffected).
+- **Doc surfaces bumped:** README, USAGE_GUIDE (+ mirror), update-package
+  README + CLAUDE, GUIDE_NONTECH_BEGINNER, BENCHMARKS-METHODOLOGY,
+  tools.json regen.
+
+### Gates
+
+```
+pytest                → 1566 passed, 9 skipped  (was 1561 at v0.25.2)
+audit                 → 96/96 met=True parity=1.0000
+mypy --strict 9 core  → Success: no issues found
+ruff check .          → All checks passed
+```
+
+PR: TBD (PR-G1 cycle 18).
+
 ## [0.25.2] — 2026-05-05
 
 Cycle 17 PR-F2 release — **PJ7 → PJ8 rebrand (rebrand #10, FINAL)**.

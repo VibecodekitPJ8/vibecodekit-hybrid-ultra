@@ -11,7 +11,7 @@
 ## 1. What `conformance_audit` actually measures
 
 `conformance_audit` (invoked via `/vibe-audit` or the CLI) runs 96
-internal probes (at v0.25.2; count grows with each release) that check
+internal probes (at v0.25.3; count grows with each release) that check
 **architectural invariants**:
 
 | Category | Example probes | What it proves |

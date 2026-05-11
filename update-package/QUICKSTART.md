@@ -99,7 +99,9 @@ PYTHONPATH=scripts python -m vibecodekit.conformance_audit
 # → 96/96 probes pass (internal self-test)
 
 # 3. Permission engine (phải chặn lệnh nguy hiểm)
-PYTHONPATH=scripts python -m vibecodekit.cli permission "rm -rf /"
+# `--user-runtime` redirects state to ~/.vibecode/runtime/ thay vì $cwd —
+# tránh pollute working directory với .vibecode/runtime/denials.json.
+PYTHONPATH=scripts python -m vibecodekit.cli permission "rm -rf /" --user-runtime
 # → {"decision": "deny", "reason": "destructive recursive delete"}
 
 # 4. Methodology gate
