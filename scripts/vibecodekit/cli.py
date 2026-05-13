@@ -951,8 +951,9 @@ def _cmd_harness_story(args: argparse.Namespace) -> int:
     if stories_dir.is_dir():
         for entry in stories_dir.iterdir():
             stem = entry.name.split("-", 1)[0] if "-" in entry.name else entry.stem
-            if stem.upper().startswith("US"):
-                existing.append(entry.name.split("-")[0] + "-" + entry.name.split("-")[1])
+            parts = entry.name.split("-")
+            if stem.upper().startswith("US") and len(parts) >= 2:
+                existing.append(parts[0] + "-" + parts[1])
     story_id = args.id or _hc.next_story_id(existing)
     slug = _hc.slugify(args.title)
     extra = []

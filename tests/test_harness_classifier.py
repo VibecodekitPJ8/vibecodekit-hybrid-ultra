@@ -323,3 +323,26 @@ def test_cli_classify_json_smoke() -> None:
     payload = json.loads(out.stdout)
     assert payload["lane"] == "high_risk"
     assert payload["hard_gates"] == ["auth"]
+
+
+def test_cli_story_handles_malformed_dirname(tmp_path: Path) -> None:
+    """Regression — story scanner should not crash on dirnames like ``US.md``
+    or ``USsomething`` that start with ``US`` but contain no dash."""
+    stories = tmp_path / "docs" / "stories"
+    stories.mkdir(parents=True)
+    (stories / "US.md").write_text("legacy", encoding="utf-8")
+    (stories / "USsomething").mkdir()
+    (stories / "US-001-real-story.md").write_text("real", encoding="utf-8")
+    out = subprocess.run(
+        [
+            sys.executable, "-m", "vibecodekit.cli",
+            "harness", "--root", str(tmp_path),
+            "story", "Add second real story",
+        ],
+        capture_output=True,
+        text=True,
+        env={"PYTHONPATH": "scripts", "PATH": "/usr/bin:/bin"},
+        check=True,
+    )
+    payload = json.loads(out.stdout)
+    assert payload["story_id"] == "US-002"

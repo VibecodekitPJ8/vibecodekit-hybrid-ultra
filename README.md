@@ -516,7 +516,7 @@ with attribution — from
 [gstack](https://github.com/garrytan/gstack) (© Garry Tan, MIT,
 commit `675717e3`).  Per-version evolution (which release introduced
 which subset, audit probe count growth, etc.) is tracked in
-[`CHANGELOG.md`](CHANGELOG.md); the kit currently ships **96** internal
+[`CHANGELOG.md`](CHANGELOG.md); the kit currently ships **97** internal
 conformance probes — see
 [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) for what that
 number measures and what it does **not** claim.

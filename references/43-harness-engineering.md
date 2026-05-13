@@ -11,7 +11,7 @@
 **VibecodeKit Hybrid Ultra ≠ Harness-Experimental** — but they share a
 DNA: *both are operating frameworks for AI coding agents.*
 
-- VibecodeKit is **heavy** (8-step pipeline, 96 conformance probes,
+- VibecodeKit is **heavy** (8-step pipeline, 97 conformance probes,
   scaffold engine, permission engine, MCP servers, sub-agent ACL, intent
   router, slash command surface).  Maximum capability, maximum opinion.
 - Harness Engineering is **light** (templates + risk classifier +
@@ -21,7 +21,7 @@ DNA: *both are operating frameworks for AI coding agents.*
 Pattern G is the bridge: it adds a Harness-style lightweight entry-path
 for users who want to drive agent work through a smaller surface than
 the full 8-step pipeline.  Existing users keep their slash commands,
-scaffold engine, and 96-probe audit untouched.
+scaffold engine, and 97-probe audit untouched.
 
 ## When to use which entry path
 
@@ -29,7 +29,7 @@ scaffold engine, and 96-probe audit untouched.
 |:---------|:----------------------:|:---------------------:|
 | Greenfield project, picks from 11 scaffold preset | ✓ | |
 | Existing brownfield repo, want to add an agentic layer | | ✓ |
-| Need built-in 96-probe audit + permission engine | ✓ | (audit still runs; permission engine remains active) |
+| Need built-in 97-probe audit + permission engine | ✓ | (audit still runs; permission engine remains active) |
 | Want minimal docs-only ops layer; no Python runtime | | ✓ |
 | Use Devin session (auto-discovers `.devin/skills/`) | ✓ (skill loads full pipeline) | ✓ (skill also exposes harness verbs) |
 | Want OpenAI Harness Engineering vocabulary parity | | ✓ |
@@ -50,7 +50,7 @@ input material when work crosses into implementation.
 | Test taxonomy | RRI-T 7 dim × 8 axes | Test matrix story × {unit, integration, e2e, platform, release} | Different shapes; both kept |
 | Friction → improvement | `vck-learn` + `.vibecode/learnings.jsonl` + `vck-retro` | `docs/HARNESS_BACKLOG.md` | Functionally equivalent; harness is doc-only |
 | Install mechanism | `vibe install <dst>` Python CLI + update-package | `curl ... \| bash install-harness.sh` | Pattern G adds `vibe harness init` shortcut |
-| Validation ladder | 96-probe audit + pytest + ruff + mypy strict 9-core | declarative ladder (validate:quick → test:integration → e2e → platform → release) | VibecodeKit ladder is executable; Harness ladder is contractual |
+| Validation ladder | 97-probe audit + pytest + ruff + mypy strict 9-core | declarative ladder (validate:quick → test:integration → e2e → platform → release) | VibecodeKit ladder is executable; Harness ladder is contractual |
 
 ## Pattern G CLI surface
 
