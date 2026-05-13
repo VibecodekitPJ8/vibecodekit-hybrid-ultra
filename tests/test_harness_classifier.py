@@ -328,6 +328,7 @@ def test_cli_classify_json_smoke() -> None:
 def test_cli_story_handles_malformed_dirname(tmp_path: Path) -> None:
     """Regression — story scanner should not crash on dirnames like ``US.md``
     or ``USsomething`` that start with ``US`` but contain no dash."""
+    repo_root = Path(__file__).resolve().parent.parent
     stories = tmp_path / "docs" / "stories"
     stories.mkdir(parents=True)
     (stories / "US.md").write_text("legacy", encoding="utf-8")
@@ -339,6 +340,7 @@ def test_cli_story_handles_malformed_dirname(tmp_path: Path) -> None:
             "harness", "--root", str(tmp_path),
             "story", "Add second real story",
         ],
+        cwd=repo_root,
         capture_output=True,
         text=True,
         env={"PYTHONPATH": "scripts", "PATH": "/usr/bin:/bin"},
