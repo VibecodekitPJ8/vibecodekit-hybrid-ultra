@@ -48,7 +48,7 @@ Tests to author:
 ### Layer 4 — Platform
 
 Coverage target:
-- 96-probe conformance still passes
+- 97-probe conformance still passes
 - Permission engine classifies new commands correctly
 - Sub-agent ACL boundaries respected
 - MCP server health checks pass

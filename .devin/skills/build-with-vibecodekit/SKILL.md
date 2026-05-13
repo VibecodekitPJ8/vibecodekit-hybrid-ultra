@@ -13,7 +13,7 @@ slash-command markdown files as prompt templates.
 - User wants Devin to walk through the **VIBECODE-MASTER v5** 8-step
   pipeline (scan → RRI → vision → blueprint → task graph → build →
   verify → ship).
-- User wants Devin to run the **conformance audit** (96 probes) or
+- User wants Devin to run the **conformance audit** (97 probes) or
   **permission engine** (6-layer classification) before merging a PR.
 - User mentions any of: `vibe`, `vibecodekit`, `VibecodeKit`,
   `vck-ship`, `vck-review`, `rri`, `RRI-T`, `RRI-UX`, `scaffold preset`,
@@ -48,7 +48,7 @@ vibecodekit scripts dir).
 |:-----------|:--------|:---------------:|
 | `vibe demo` | All-in-one offline tour (6 sections, ~2s) | ✓ |
 | `vibe doctor [--root <dir>]` | Health-check repo layout (32+ checks) | ✓ |
-| `vibe audit [--threshold 1.0] [--json]` | 96-probe conformance self-test | ✓ |
+| `vibe audit [--threshold 1.0] [--json]` | 97-probe conformance self-test | ✓ |
 | `vibe permission "<cmd>" [--user-runtime]` | Classify shell command (6-layer pipeline) | ✓ |
 | `vibe scaffold list` | List 11 presets | ✓ |
 | `vibe scaffold preview <preset>/<stack>` | Dry-run scaffold (no files written) | ✓ |
@@ -150,7 +150,7 @@ Run release-gate JSONL through the methodology validators:
 vibe rri-t  tests/rri-t-touchfiles.json     # 7 dims × 8 stress axes
 vibe rri-ux runtime/rri/ux-flags.json       # Flow Physics
 vibe verify coverage                         # REQ-* coverage from blueprint
-vibe audit --threshold 1.0                   # 96 probes (regression guard)
+vibe audit --threshold 1.0                   # 97 probes (regression guard)
 ```
 
 Reference: `references/RRI-T_METHODOLOGY.docx`,
@@ -208,11 +208,11 @@ This walks through all 8 steps with annotated output. Source:
 | [`README.md`](../../../README.md) §🇻🇳 Hướng dẫn tiếng Việt | ~275 dòng | First read — comprehensive cheatsheet (VN) |
 | [`docs/GUIDE_NONTECH_BEGINNER.md`](../../../docs/GUIDE_NONTECH_BEGINNER.md) | ~800 dòng | Worked example A→Z "app quản lý chi tiêu" |
 | [`QUICKSTART.md`](../../../QUICKSTART.md) | ~150 dòng | 5-min refresher |
-| [`USAGE_GUIDE.md`](../../../USAGE_GUIDE.md) | ~2700 dòng | Deep reference: 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe |
+| [`USAGE_GUIDE.md`](../../../USAGE_GUIDE.md) | ~2700 dòng | Deep reference: 31 CLI + 42 slash + 7 sub-agent + 33 hook + 97 probe |
 | [`SKILL.md`](../../../SKILL.md) | ~250 dòng | Claude/Cursor skill manifest (yaml frontmatter) |
 | [`references/00-overview.md`](../../../references/00-overview.md) | ~400 dòng | Architecture + design decisions |
 | [`references/VIBECODE-MASTER-v5.txt`](../../../references/VIBECODE-MASTER-v5.txt) | ~600 dòng | Full 8-step methodology spec |
-| [`BENCHMARKS-METHODOLOGY.md`](../../../BENCHMARKS-METHODOLOGY.md) | ~500 dòng | What "96/96" actually measures |
+| [`BENCHMARKS-METHODOLOGY.md`](../../../BENCHMARKS-METHODOLOGY.md) | ~500 dòng | What "97/97" actually measures |
 
 ## Common gotchas in Devin sessions
 
@@ -230,7 +230,7 @@ This walks through all 8 steps with annotated output. Source:
    directly executable from Devin** — they are markdown prompt templates
    for Claude Code / Cursor. Devin should read them for guidance, then
    chain the corresponding `vibe <subcommand>` CLI calls.
-6. **The 96-probe audit is an internal regression guard**, NOT an
+6. **The 97-probe audit is an internal regression guard**, NOT an
    external code-quality benchmark (no HumanEval / MBPP / SWE-bench).
    See `BENCHMARKS-METHODOLOGY.md`.
 

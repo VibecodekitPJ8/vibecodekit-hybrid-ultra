@@ -461,7 +461,7 @@ Nếu deploy cần 2FA (vd: Vercel CLI), Devin ask user export TOTP secret từ 
 | **RRI-T** | RRI Testing dimension — 7 dim × 8 axes test plan |
 | **RRI-UX** | RRI UX dimension — 7 dim × 8 Flow Physics axes UX critique |
 | **Scaffold preset** | Pre-built template cho 1 project type (11 preset × 3 stack = 33 combo) |
-| **Conformance audit** | 96 internal regression probe — chạy `vibe audit` để verify tool healthy |
+| **Conformance audit** | 97 internal regression probe — chạy `vibe audit` để verify tool healthy |
 | **Permission engine** | 6-layer classifier (literal block → glob → semantic → user-override → audit log → escalate) — `permission_engine.py` |
 | **Sub-agent** | 7 role (coordinator/scout/builder/qa/security/reviewer/qa-lead) với ACL khác nhau — `subagent_runtime.py` |
 | **Intent router** | NL → CLI subcommand mapping (vd: "audit cho tao" → `vibe audit`) — `intent_router.py` |

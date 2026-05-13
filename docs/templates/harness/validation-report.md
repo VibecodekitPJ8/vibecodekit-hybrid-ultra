@@ -28,7 +28,7 @@ column or link to CI logs.
 | Unit | | `pytest tests/test_<area>.py -q` | pass / fail / N tests | |
 | Integration | | `pytest tests/integration/test_<flow>.py -q` | | |
 | E2E | | `playwright test ...` or equivalent | | |
-| Platform | | `vibe audit --threshold 1.0` | 96/96 | |
+| Platform | | `vibe audit --threshold 1.0` | 97/97 | |
 | Release | | `vibe ship <target> --dry-run` | exit 0 | |
 
 ## Acceptance Criteria Trace
@@ -58,7 +58,7 @@ mitigation here.
 
 ## Regression Audit
 
-- [ ] `vibe audit --threshold 1.0` → 96/96 (or document new probe count)
+- [ ] `vibe audit --threshold 1.0` → 97/97 (or document new probe count)
 - [ ] `pytest -q` → all pass (or document the diff)
 - [ ] `ruff check .` → clean
 - [ ] `mypy --strict <module>` → clean for any touched 9-core module

@@ -44,7 +44,7 @@ PYTHONPATH=./scripts python examples/devin_pipeline_demo.py --target /tmp/myproj
 
 1. **Doctor** — health-check the project layout
 2. **Permission Engine** — classify 5 commands (allow/deny)
-3. **Conformance Audit** — run 96 internal regression probes
+3. **Conformance Audit** — run 97 internal regression probes
 4. **Scaffold Preview** — preview the `api-todo` preset
 5. **Intent Router** — classify 3 free-form phrases to slash commands
 6. **MCP Selfcheck** — ping the bundled MCP server
