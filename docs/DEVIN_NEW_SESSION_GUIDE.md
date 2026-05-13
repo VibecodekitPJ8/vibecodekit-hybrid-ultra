@@ -38,7 +38,7 @@ git clone https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra.git
 cd vibecodekit-hybrid-ultra
 pip install -e .         # hoặc PYTHONPATH=./scripts
 vibe doctor              # smoke check
-vibe audit               # 96/96 probe verify
+vibe audit               # 97/97 probe verify
 ```
 
 Nếu `pip install -e .` fail vì PEP 668 (`externally-managed-environment`):
@@ -137,7 +137,7 @@ YÊU CẦU PIPELINE:
 **Devin action:**
 ```bash
 vibe doctor --root /home/ubuntu/repos/<target-project>
-vibe audit                              # 96/96 verify
+vibe audit                              # 97/97 verify
 ls -la                                  # discover existing files
 git log --oneline -20 2>/dev/null || echo "fresh project, no git"
 ```
@@ -151,7 +151,7 @@ git log --oneline -20 2>/dev/null || echo "fresh project, no git"
 
 **Nếu fail:**
 - `vibe doctor` exit ≠ 0 → fix invariant trước khi tiếp (xem `vibe doctor --verbose`)
-- `vibe audit` < 96/96 → bug môi trường, Devin sẽ retry hoặc escalate
+- `vibe audit` < 97/97 → bug môi trường, Devin sẽ retry hoặc escalate
 
 ---
 
@@ -291,13 +291,13 @@ Mỗi sub-agent builder có ACL hạn chế (`can_mutate=true`, `run_command=tru
 vibe rri-t --jsonl tests/touchfiles.jsonl     # 7 dim × 8 axes
 vibe rri-ux --jsonl ux/touchfiles.jsonl       # nếu có UI
 vibe vn-check --file flags.json               # nếu VN scope
-vibe audit                                     # 96/96
+vibe audit                                     # 97/97
 pytest                                         # full suite
 ```
 
 **Expected output:**
 - Tất cả gate PASS (≥ 70 % per dim, ≥ 5/7 @ ≥ 85 %, 0 P0 FAIL)
-- Audit 96/96 met=True parity=1.0000
+- Audit 97/97 met=True parity=1.0000
 - pytest exit 0
 
 **Nếu fail:**
@@ -442,7 +442,7 @@ Nếu deploy cần 2FA (vd: Vercel CLI), Devin ask user export TOTP secret từ 
 | 3 | `vibe permission` để lại denials.json trong cwd | Quên cờ `--user-runtime` | `vibe permission "<cmd>" --user-runtime` |
 | 4 | `pip install` báo `externally-managed-environment` | PEP 668 | `python3 -m venv .venv && source .venv/bin/activate && pip install -e .` |
 | 5 | Devin không tự load skill | Skill folder không đúng convention | Kiểm tra `.devin/skills/build-with-vibecodekit/SKILL.md` có frontmatter + path đúng |
-| 6 | `vibe audit` báo < 96 probe | Repo chưa sync với main HEAD | `git pull origin main && pip install -e .` |
+| 6 | `vibe audit` báo < 97 probe | Repo chưa sync với main HEAD | `git pull origin main && pip install -e .` |
 | 7 | Devin push direct vào main | Prompt thiếu constraint | Thêm `"luôn push vào branch devin/<timestamp>-<slug>, không push main"` vào prompt |
 | 8 | Scaffold apply fail "directory not empty" | Target đã có file | Either `vibe scaffold apply ... --force` HOẶC chọn dir trống |
 | 9 | Build TIP fail loop > 3 lần | Sub-agent builder không break được | Devin sẽ escalate user — user có thể edit TIP requirement hoặc skip |
@@ -475,6 +475,6 @@ Nếu deploy cần 2FA (vd: Vercel CLI), Devin ask user export TOTP secret từ 
 - [`.devin/skills/build-with-vibecodekit/SKILL.md`](../.devin/skills/build-with-vibecodekit/SKILL.md) — skill spec Devin auto-load
 - [`examples/devin_pipeline_demo.py`](../examples/devin_pipeline_demo.py) — programmatic 8-step walkthrough
 - [`docs/GUIDE_NONTECH_BEGINNER.md`](GUIDE_NONTECH_BEGINNER.md) — worked example A→Z (45 min)
-- [`USAGE_GUIDE.md`](../USAGE_GUIDE.md) — reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe
+- [`USAGE_GUIDE.md`](../USAGE_GUIDE.md) — reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 97 probe
 - [`references/VIBECODE-MASTER-v5.txt`](../references/VIBECODE-MASTER-v5.txt) — methodology bản gốc
 - [Devin docs](https://docs.devin.ai) — Devin platform reference

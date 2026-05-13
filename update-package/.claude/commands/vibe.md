@@ -165,7 +165,7 @@ EN: In addition to free-form prose, type `/vibe <verb>` for one of
 | `review` | `/vck-review`       | adversarial 7-specialist review       | adversarial multi-specialist    |
 | `qa`     | `/vck-qa`           | real-browser QA checklist + fix loop  | real-browser QA + fix loop      |
 | `ship`   | `/vck-ship`         | test → review → commit → push → PR    | test → review → commit → push → PR |
-| `audit`  | `/vibe-audit`       | 96-probe internal self-test           | 96-probe internal regression    |
+| `audit`  | `/vibe-audit`       | 97-probe internal self-test           | 97-probe internal regression    |
 | `doctor` | `/vibe-doctor`      | kiểm tra overlay cài đúng             | overlay health check            |
 
 ```bash

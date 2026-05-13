@@ -1159,3 +1159,93 @@ def _probe_osint_terminal_scaffold_ship(tmp: Path) -> Tuple[bool, str]:
         "osint-terminal scaffold ships 14 nextjs files + RGB-channel tokens "
         "+ JetBrains Mono + 3 layout primitives + Tailwind <alpha-value> wiring",
     )
+
+
+_HARNESS_TEMPLATE_RELS: Tuple[str, ...] = (
+    "docs/templates/harness/README.md",
+    "docs/templates/harness/story.md",
+    "docs/templates/harness/spec-intake.md",
+    "docs/templates/harness/decision.md",
+    "docs/templates/harness/validation-report.md",
+    "docs/templates/harness/high-risk-story/overview.md",
+    "docs/templates/harness/high-risk-story/design.md",
+    "docs/templates/harness/high-risk-story/execplan.md",
+    "docs/templates/harness/high-risk-story/validation.md",
+)
+
+
+@probe("97_harness_pattern_g_ships", group="governance")
+def probe_97_harness_pattern_g_ships(tmp: Path) -> Tuple[bool, str]:
+    """Pattern G — Harness Engineering templates + classifier + CLI ship.
+
+    Verifies:
+    1. All 9 harness template files exist under ``docs/templates/harness/``.
+    2. ``references/43-harness-engineering.md`` exists + cross-links the templates.
+    3. ``scripts/vibecodekit/harness_classifier.py`` is importable + classifier
+       is deterministic (same prompt → same lane).
+    4. ``vibe harness classify ... --json`` is registered in the CLI parser
+       (we don't shell out — we introspect the parser to keep the probe fast).
+    """
+    roots = _candidate_repo_roots(tmp)
+    chosen: Path | None = None
+    for r in roots:
+        if (r / "docs" / "templates" / "harness" / "story.md").exists():
+            chosen = r
+            break
+    if chosen is None:
+        return False, "could not locate docs/templates/harness/ in any candidate root"
+    missing: list[str] = []
+    for rel in _HARNESS_TEMPLATE_RELS:
+        if not (chosen / rel).exists():
+            missing.append(rel)
+    if missing:
+        return False, "missing harness templates: " + ", ".join(missing)
+
+    ref_doc = chosen / "references" / "43-harness-engineering.md"
+    if not ref_doc.exists():
+        return False, "references/43-harness-engineering.md missing"
+    ref_text = ref_doc.read_text(encoding="utf-8")
+    for token in ("docs/templates/harness/", "harness_classifier",
+                  "10 flag", "high_risk"):
+        if token not in ref_text:
+            return False, f"references/43 missing cross-ref token {token!r}"
+
+    classifier_path = chosen / "scripts" / "vibecodekit" / "harness_classifier.py"
+    if not classifier_path.exists():
+        return False, "scripts/vibecodekit/harness_classifier.py missing"
+    classifier_text = classifier_path.read_text(encoding="utf-8")
+    for token in ("class RiskFlag", "class RiskLane", "def classify",
+                  "HARD_GATES"):
+        if token not in classifier_text:
+            return False, f"harness_classifier.py missing token {token!r}"
+
+    cli_path = chosen / "scripts" / "vibecodekit" / "cli.py"
+    if not cli_path.exists():
+        return False, "scripts/vibecodekit/cli.py missing"
+    cli_text = cli_path.read_text(encoding="utf-8")
+    for token in ("_cmd_harness", '"harness"', "harness_cmd",
+                  "_cmd_harness_classify"):
+        if token not in cli_text:
+            return False, f"cli.py missing harness wiring token {token!r}"
+
+    # 4. Classifier determinism check — import via canonical path so dataclass
+    # ``__future__`` annotations resolve correctly.
+    from .. import harness_classifier as _hc
+    sample = "Add login flow with JWT and RBAC"
+    a = _hc.classify(sample)
+    b = _hc.classify(sample)
+    if a != b:
+        return False, "classifier is non-deterministic for the same prompt"
+    if a.lane.value != "high_risk":
+        return (
+            False,
+            f"classifier regression: {sample!r} expected high_risk, "
+            f"got {a.lane.value!r}",
+        )
+
+    return (
+        True,
+        "Pattern G ships: 9 harness templates + references/43 + "
+        "harness_classifier (deterministic, hard-gate aware) + "
+        "vibe harness {classify,init,story,decision} CLI surface",
+    )

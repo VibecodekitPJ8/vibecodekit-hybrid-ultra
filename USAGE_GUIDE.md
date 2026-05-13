@@ -1,10 +1,10 @@
-# VibecodeKit Hybrid Ultra — Hướng dẫn sử dụng chi tiết (v0.25.4)
+# VibecodeKit Hybrid Ultra — Hướng dẫn sử dụng chi tiết (v0.26.0)
 
 Bộ kit đầy đủ để build dự án theo phương pháp **VIBECODE-MASTER** với **Full
-Agentic OS** runtime (96 internal conformance probes at v0.25.4 — self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`; all
+Agentic OS** runtime (97 internal conformance probes at v0.26.0 — self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`; all
 actionable tests pass từ repo root; bundled `tests/` trong skill zip chứa
 một subset đại diện để user smoke-test sau khi extract — xem §15.10).
-Bản này ứng với **v0.25.4** (hiện hành — xem `CHANGELOG.md` cho
+Bản này ứng với **v0.26.0** (hiện hành — xem `CHANGELOG.md` cho
 lịch sử các bản trước, mỗi entry kèm link PR + finding khoá lại):
 
 - **v0.16.1** — doc coherence + recheck cleanup (PR #16, this release)
@@ -29,7 +29,7 @@ Tài liệu hướng dẫn cách sử dụng kit trong **ChatGPT**, **OpenAI Cod
 > [§20 Slash command reference (42 lệnh)](#20-slash-command-reference--42-lệnh),
 > [§21 Sub-agent reference (7 vai)](#21-sub-agent-reference--7-vai),
 > [§22 Hook event reference (33 event + 4 script)](#22-hook-event-reference--33-event--4-script),
-> hoặc [§23 Conformance probe catalog (96 probe)](#23-conformance-probe-catalog--96-probe).
+> hoặc [§23 Conformance probe catalog (97 probe)](#23-conformance-probe-catalog--97-probe).
 
 ---
 
@@ -59,9 +59,10 @@ Tài liệu hướng dẫn cách sử dụng kit trong **ChatGPT**, **OpenAI Cod
 20. [Slash command reference — 42 lệnh](#20-slash-command-reference--42-lệnh)
 21. [Sub-agent reference — 7 vai](#21-sub-agent-reference--7-vai)
 22. [Hook event reference — 33 event + 4 script](#22-hook-event-reference--33-event--4-script)
-23. [Conformance probe catalog — 96 probe](#23-conformance-probe-catalog--96-probe)
+23. [Conformance probe catalog — 97 probe](#23-conformance-probe-catalog--97-probe)
 24. [Permission engine — 6 layer](#24-permission-engine--6-layer)
 25. [Release-gate strategy](#25-release-gate-strategy)
+32. [Harness Engineering — `vibe harness` (Pattern G)](#32-harness-engineering--vibe-harness-pattern-g)
 
 ### Phần III — Lịch sử & phụ lục
 
@@ -369,7 +370,7 @@ slash command trong `.claude/commands/` sẵn sàng.
 | `/vibe-rri-ui` | Bước 7 — pipeline 4-phase cho UI. |
 | `/vibe-verify` | Đóng báo cáo verify. |
 | `/vibe-complete` | Completion Report. |
-| `/vibe-audit` | Chạy 96 conformance probes (at v0.25.4). |
+| `/vibe-audit` | Chạy 97 conformance probes (at v0.26.0). |
 | `/vibe-doctor` | Chẩn đoán sức khỏe cài đặt. |
 | `/vibe-dashboard` | Dashboard runtime. |
 | `/vibe-permission <cmd>` | Hỏi permission engine có allow lệnh không. |
@@ -969,7 +970,7 @@ File HTML tự-chứa (không framework, không network), nhúng full JSON summa
 # Lifecycle
 vibe doctor                       # health check
 vibe dashboard                    # runtime dashboard
-vibe audit --threshold 0.85       # 96 probes at v0.25.4 (canonical count grows per release)
+vibe audit --threshold 0.85       # 97 probes at v0.26.0 (canonical count grows per release)
 vibe install <destination>        # cài overlay vào project
 vibe compact [--reactive]         # layer 4/5 compaction
 
@@ -1411,7 +1412,7 @@ vibe dashboard
 
 #### 19.3 `vibe audit`
 
-Chạy 96 conformance probe.  Default threshold = 0.85; release gate
+Chạy 97 conformance probe.  Default threshold = 0.85; release gate
 ở 1.0 (xem §25).
 
 ```bash
@@ -1421,7 +1422,7 @@ vibe audit --json                   # raw envelope
 vibe audit --probe 85_no_orphan_module   # chạy đúng 1 probe
 ```
 
-Tham khảo §23 cho catalog đầy đủ 96 probe.
+Tham khảo §23 cho catalog đầy đủ 97 probe.
 
 #### 19.4 `vibe install <destination>`
 
@@ -1679,7 +1680,7 @@ vibe manifest emit > manifest.json     # ghi file
 ```
 
 Manifest gồm metadata: 42 slash commands, 7 agents, 33 hook events,
-96 probes, version, build hash.
+97 probes, version, build hash.
 
 #### 19.20 `vibe refine`
 
@@ -1842,7 +1843,7 @@ như legacy alias. Hiện hành cả hai dạng đều hoạt động (xem CHANG
 | `/vibe-compact` | — | 5-layer context defense |
 | `/vibe-doctor` | — | health check |
 | `/vibe-dashboard` | — | summarise today's events |
-| `/vibe-audit` | security | 96-probe conformance audit |
+| `/vibe-audit` | security | 97-probe conformance audit |
 | `/vibe-install` | — | reconcile-install overlay vào project mới |
 | `/vibe-scaffold` | builder | scaffold preset (11 × 3 = 33) |
 | `/vibe-ship` | — | deploy 7 target |
@@ -2074,12 +2075,12 @@ echo '{"command":"echo evil"}' | python .claw/hooks/pre_tool_use_my_extra.py
 
 ---
 
-## 23. Conformance probe catalog — 96 probe
+## 23. Conformance probe catalog — 97 probe
 
 > Dùng `vibe audit` để chạy tất cả; `vibe audit --probe <name>` để
 > chạy 1 probe.  Threshold release-gate là **1.0** (100 % parity).
 
-### 23.1 Cluster theo domain (96 probe)
+### 23.1 Cluster theo domain (97 probe)
 
 | Cluster | Range | Mô tả |
 |---|---|---|
@@ -2227,7 +2228,7 @@ PYTHONPATH=./scripts pytest tests
 
 ```bash
 PYTHONPATH=./scripts python -m vibecodekit.conformance_audit --threshold 1.0
-# → parity: 100.00%   (96/96, threshold 100%)
+# → parity: 100.00%   (97/97, threshold 100%)
 ```
 
 ### 25.3 Gate 3 — release matrix L1+L2+L3
@@ -2252,6 +2253,166 @@ project layout.  Đảm bảo cả 3 đều xanh trước khi tag.
 
 Nguyên tắc: chia rủi ro theo PR; mỗi PR phải có 3 gate xanh; gates
 match xuyên CI (3.9 / 3.11 / 3.12).
+
+## 32. Harness Engineering — `vibe harness` (Pattern G)
+
+> **Ra mắt:** v0.26.0 (cycle 22 PR-K1, 2026-05-05).
+> **Trạng thái:** stable, additive, không breaking changes.
+
+Pattern G "Harness-style ops layer" là một entry path nhẹ hơn so với full 8-step pipeline.  Dựa trên [OpenAI Harness Engineering writeup](https://openai.com/index/harness-engineering/) + reference repo upstream (xem attribution + full vocabulary map trong [`references/43-harness-engineering.md`](references/43-harness-engineering.md)).
+
+### 32.1. Khi nào dùng Pattern G
+
+| Use case | Lệnh phù hợp | Lý do |
+|:---------|:-------------|:------|
+| Greenfield, intake nhanh | `vibe harness init` + `spec-intake.md` | Lighter than full RRI |
+| Story nhỏ, scope rõ (1-2 file) | `vibe harness story "..."` | Tránh boilerplate TIP / Blueprint |
+| Story đụng auth / data / migration | `vibe harness classify ...` → `story` | Auto-route sang `high-risk` 4-file folder |
+| Architecture decision | `vibe harness decision "..."` | Auto-numbered ADR, parallel DESIGN-LOG |
+| Multi-domain product | Full pipeline (`/vibe-scan` → ...) | Pattern G chưa đủ depth |
+
+### 32.2. CLI surface — 4 subcommand
+
+```bash
+# 10-flag risk classifier (heuristic + manual override)
+vibe harness classify "Add a refresh-token endpoint" --json
+# → JSON: lane, flags_set, hard_gates, reason, validation_required
+
+vibe harness classify "Add a refresh-token endpoint"  # human-readable
+# → lane: high_risk
+#   hard gates: auth
+#   flags: auth
+#   reason: hard gate(s) auth tripped → high-risk regardless of total flag count (1)
+#   validation: unit, integration, e2e, platform, release
+
+# Copy 9 Harness templates vào project bất kỳ
+vibe harness --root /path/to/project init
+# → tạo docs/templates/harness/{README.md, story.md, spec-intake.md, decision.md,
+#   validation-report.md, high-risk-story/{overview,design,execplan,validation}.md}
+
+# Override existing files
+vibe harness --root /path/to/project init --force
+
+# Preview only
+vibe harness --root /path/to/project init --dry-run
+
+# Scaffold story packet (auto-classify lane)
+vibe harness --root . story "User can reset password"
+# → docs/stories/US-001-user-can-reset-password.md (tiny / normal)
+#   hoặc docs/stories/US-001-user-can-reset-password/{overview,design,execplan,validation}.md (high-risk)
+
+# Force lane override
+vibe harness --root . story "Trivial cosmetic change" --lane high-risk
+
+# Pass extra flags from CLI (merged with heuristic)
+vibe harness --root . story "Trivial change" --flags auth,data-model
+
+# Scaffold ADR
+vibe harness --root . decision "Adopt JWT with refresh-token rotation"
+# → docs/decisions/0001-adopt-jwt-with-refresh-token-rotation.md
+
+vibe harness --root . decision "Migrate to Postgres 16" --status accepted
+```
+
+### 32.3. 10-flag taxonomy
+
+| Flag | Hard gate? | Trigger keyword (heuristic) |
+|:-----|:----------:|:-----------------------------|
+| `auth` | ✓ | login, JWT, session, password, refresh token, oauth |
+| `authorization` | ✓ | RBAC, ACL, role, permission, tenant, admin |
+| `data_model` | ✓ | schema, migration, alembic, drop column, cascade, retention |
+| `audit_security` | ✓ | audit log, PII, redact, encryption, vault, OWASP |
+| `external_systems` | ✓ | stripe, twilio, webhook, queue, SQS, SNS, kafka |
+| `public_contracts` | | OpenAPI, response envelope, breaking change, client-visible |
+| `cross_platform` | | desktop, mobile, deep-link, electron, native shell |
+| `existing_behavior` | | refactor, rewrite, replace, deprecate, migrate from |
+| `weak_proof` | | "no tests", "untested", "missing coverage" |
+| `multi_domain` | | "billing and auth", "multi-domain" (2+ domain mention) |
+
+**Hard gate logic:** bất kỳ 1 flag hard gate hit → forced `high_risk`, bất kể số flag tổng cộng.  Lý do: auth bug / schema migration / external webhook fail có thể gây production incident — release ladder cần full 5 layer (unit / integration / e2e / platform / release).
+
+### 32.4. 3-lane decision rule
+
+```
+hard_gates_count >= 1     → high_risk  (5-layer validation ladder)
+flags_count == 0          → tiny       (unit test only)
+flags_count == 1          → tiny       (single flag, low blast radius)
+flags_count in {2, 3}     → normal     (unit + integration)
+flags_count >= 4          → high_risk  (5-layer validation ladder)
+```
+
+User có thể override lane bằng `--lane tiny|normal|high-risk` (heuristic vẫn được record trong `reason` field).
+
+### 32.5. JSON contract — `classify_to_dict`
+
+```python
+from vibecodekit import harness_classifier as hc
+
+result = hc.classify_to_dict(
+    "Add refresh-token endpoint with audit log",
+    extra_flags=["external_systems"],  # merge với heuristic
+    override_lane=None,                 # hoặc hc.RiskLane.NORMAL để force
+)
+# {
+#   "lane": "high_risk",
+#   "flags_set": ["audit_security", "auth", "external_systems"],
+#   "hard_gates": ["audit_security", "auth", "external_systems"],
+#   "reason": "hard gate(s) audit_security, auth, external_systems tripped ...",
+#   "validation_required": ["unit", "integration", "e2e", "platform", "release"]
+# }
+```
+
+`ClassificationResult` là `frozen=True` dataclass (immutable, hashable).  `classify_to_dict` wrap qua JSON-safe dict cho CLI / serialisation.
+
+### 32.6. Templates ship
+
+| File | Mục đích |
+|:-----|:---------|
+| `docs/templates/harness/README.md` | Index + quick start |
+| `docs/templates/harness/story.md` | Normal-lane story packet |
+| `docs/templates/harness/spec-intake.md` | Greenfield spec distillation |
+| `docs/templates/harness/decision.md` | ADR template (numbered) |
+| `docs/templates/harness/validation-report.md` | Post-implementation evidence |
+| `docs/templates/harness/high-risk-story/overview.md` | High-risk entry point |
+| `docs/templates/harness/high-risk-story/design.md` | Architecture + data + auth |
+| `docs/templates/harness/high-risk-story/execplan.md` | Build sequence + rollback |
+| `docs/templates/harness/high-risk-story/validation.md` | 5-layer ladder + AC trace |
+
+Tất cả template carry upstream attribution.
+
+### 32.7. Probe #97 — `97_harness_pattern_g_ships`
+
+Probe `97` (group: `governance`) trong `scripts/vibecodekit/conformance/probes_governance.py` verify:
+1. 9 harness template files exist dưới `docs/templates/harness/`.
+2. `references/43-harness-engineering.md` exists + có cross-link tokens (`docs/templates/harness/`, `harness_classifier`, `10 flag`, `high_risk`).
+3. `harness_classifier.py` importable + deterministic (same prompt → same result).
+4. CLI registered (`_cmd_harness`, `harness_cmd`, `_cmd_harness_classify` trong `cli.py`).
+
+Fail mode → audit 96/97 ngay; release gate ngăn ship.
+
+### 32.8. Pattern G interoperate với full pipeline thế nào
+
+| Step (8-step VIBECODE) | Pattern G counterpart | Ghi chú |
+|:----------------------|:----------------------|:--------|
+| 1 Scan | `vibe scan` unchanged | Pattern G không có bước này |
+| 2 RRI | Optional — Pattern G replace bằng `vibe harness classify` | Lighter intake |
+| 3 Vision | `spec-intake.md` (greenfield) hoặc tiếp tục dùng Vision template | |
+| 4 Blueprint | `story.md` (normal) hoặc `high-risk-story/*` (high-risk) | Auto-route theo classifier |
+| 5 Task graph | `vibe task graph` consume cả TIP và story packet | |
+| 6 Build | Unchanged — `vibe subagent spawn builder` | |
+| 7 Verify | RRI-T / RRI-UX chạy; Pattern G thêm `validation-report.md` artefact | |
+| 8 Ship | Unchanged — `vibe ship vercel/...` | |
+
+**Cấm:** Pattern G không deprecate TIP system hoặc RRI-T.  User chọn entry path phù hợp với scope project.
+
+### 32.9. Đi sâu hơn
+
+- [`references/43-harness-engineering.md`](references/43-harness-engineering.md) — full rationale, vocabulary map, probe #97 contract, attribution.
+- [`docs/templates/harness/README.md`](docs/templates/harness/README.md) — template index + quick start.
+- [`scripts/vibecodekit/harness_classifier.py`](scripts/vibecodekit/harness_classifier.py) — production-grade classifier module.
+- [`tests/test_harness_classifier.py`](tests/test_harness_classifier.py) — 41 unit + 1 CLI smoke test (parametrised 10 flag, hard gate escalation, lane decision boundary, JSON contract, helper functions).
+- [`RELEASE_NOTES_v0.26.0.md`](RELEASE_NOTES_v0.26.0.md) — release notes cycle 22 PR-K1.
+
 ## 16. Release history
 
 ### v0.16.1 — doc coherence + recheck cleanup (PR #16)

@@ -11,7 +11,7 @@
 > verify → ship) và sinh ra sản phẩm chạy được.  ~20 phút đọc, có
 > worked example "App quản lý chi tiêu gia đình" A→Z.
 
-> **Current release:** v0.25.4 ([CHANGELOG](CHANGELOG.md)) — see [Layout](#layout) below for the surface inventory (42 slash commands, 7 sub-agent roles, 33 hook events, 96 conformance probes, …).
+> **Current release:** v0.26.0 ([CHANGELOG](CHANGELOG.md)) — see [Layout](#layout) below for the surface inventory (42 slash commands, 7 sub-agent roles, 33 hook events, 97 conformance probes, …).
 >
 > **License:** MIT — see [`LICENSE`](LICENSE) and the third-party
 > attribution manifest [`LICENSE-third-party.md`](LICENSE-third-party.md).
@@ -25,7 +25,7 @@ PYTHONPATH=./scripts python -m vibecodekit.cli demo
 ```
 
 Runs 6 steps offline: doctor health-check, permission engine (classify 5
-commands), conformance audit (96 probes), scaffold preview, intent router,
+commands), conformance audit (97 probes), scaffold preview, intent router,
 and MCP selfcheck.  See [`examples/`](examples/) for standalone scripts.
 
 ---
@@ -81,7 +81,7 @@ PYTHONPATH=./scripts python3 -m vibecodekit.cli demo
 # Bước 3 — verify (không bắt buộc, nhưng đẹp khi pass)
 pytest -q                                          # → 1566 passed
 PYTHONPATH=./scripts python3 -m vibecodekit.conformance_audit
-                                                   # → 96/96 probes met=True
+                                                   # → 97/97 probes met=True
 ```
 
 Nếu cả 3 bước OK → tool đã sẵn sàng.
@@ -129,7 +129,7 @@ master `/vibe` tự điều phối.
 | `/vibe <mô tả>` | Muốn AI tự đi 8 bước từ mô tả tự nhiên | `/vibe Tôi muốn làm shop online bán giày` |
 | `/vibe-scaffold <preset>/<stack>` | Cần khung dự án sẵn (11 preset × 3 stack) | `/vibe-scaffold saas/nextjs` |
 | `/vibe-doctor` | Health-check tool sau khi cài | `vibe doctor --root .` |
-| `/vibe-audit` | 96 conformance probe (xem code có sạch không) | `vibe audit --threshold 1.0` |
+| `/vibe-audit` | 97 conformance probe (xem code có sạch không) | `vibe audit --threshold 1.0` |
 | `/vibe-permission "<lệnh>"` | Hỏi tool: "lệnh này có an toàn không?" | `vibe permission "rm -rf /" --user-runtime` |
 | `/vibe-memory query <q>` | Tìm trong 3-tier memory (user/project/team) | `vibe memory query "color palette"` |
 | `/vibe-rri-t <jsonl>` | Test release gate 7 dimension × 8 axes | `vibe rri-t tests/touchfiles.json` |
@@ -174,16 +174,16 @@ vibe permission "git status" --user-runtime
 tránh pollute working directory. Chi tiết:
 [`references/10-permission-classification.md`](references/10-permission-classification.md).
 
-#### 5.3. Conformance audit — 96 internal probe
+#### 5.3. Conformance audit — 97 internal probe
 
-Mỗi release chạy 96 probe kiểm tra **architectural invariant** (không
+Mỗi release chạy 97 probe kiểm tra **architectural invariant** (không
 phải benchmark code-quality ngoài). Probe cover: install pipeline, doc
 parity, mirror surface sync, scaffold integrity, permission engine
 coverage, etc.
 
 ```bash
 PYTHONPATH=./scripts python3 -m vibecodekit.conformance_audit --threshold 1.0
-# → parity: 100.00% (96/96, threshold 100%)
+# → parity: 100.00% (97/97, threshold 100%)
 ```
 
 Methodology: [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md).
@@ -238,7 +238,7 @@ vibe intent route "tôi muốn làm trang điều khiển OSINT"
 ```
 
 Benchmark hiện tại: set-inclusion accuracy 0.9808 (xem
-`benchmarks/intent_router_0.25.4.json`).
+`benchmarks/intent_router_0.26.0.json`).
 
 #### 5.8. Hooks — 33 lifecycle event
 
@@ -307,11 +307,11 @@ cần network. Skill cho Devin session: [`.devin/skills/build-with-vibecodekit/S
 | [`docs/GUIDE_NONTECH_BEGINNER.md`](docs/GUIDE_NONTECH_BEGINNER.md) | Người không phải dev, muốn worked-example A→Z | ~20 phút |
 | [`docs/DEVIN_NEW_SESSION_GUIDE.md`](docs/DEVIN_NEW_SESSION_GUIDE.md) | Dùng Devin để build project end-to-end (xem §9 bên dưới) | ~15 phút |
 | [`QUICKSTART.md`](QUICKSTART.md) | Đã quen pipeline, cần 5-min refresher | 5 phút |
-| [`USAGE_GUIDE.md`](USAGE_GUIDE.md) | Reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe | ~60 phút |
+| [`USAGE_GUIDE.md`](USAGE_GUIDE.md) | Reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 97 probe | ~60 phút |
 | [`SKILL.md`](SKILL.md) | Cài làm Claude/Cursor skill | 5 phút |
 | [`.devin/skills/build-with-vibecodekit/SKILL.md`](.devin/skills/build-with-vibecodekit/SKILL.md) | Skill cho Devin session (auto-load) | 5 phút |
 | [`references/00-overview.md`](references/00-overview.md) | Hiểu architecture + design decision | ~30 phút |
-| [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) | Hiểu "96 probe" thực sự đo gì | 10 phút |
+| [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) | Hiểu "97 probe" thực sự đo gì | 10 phút |
 | [`CHANGELOG.md`](CHANGELOG.md) | Lịch sử release + breaking change | tra cứu |
 
 ### 9. Dùng tool với Devin session mới — paste link repo + 1 prompt
@@ -455,6 +455,60 @@ Output sẽ in 8 banner step + ~20 artefact, exit 0 nếu tool healthy. Xem [`do
 
 ---
 
+### 10. Harness Engineering compatibility — `vibe harness` (Pattern G, v0.26.0+)
+
+Kể từ v0.26.0, VibecodeKit cung cấp một entry path "Harness-style ops layer" như alternative nhẹ hơn so với full 8-step pipeline.  Dựa trên [OpenAI Harness Engineering writeup](https://openai.com/index/harness-engineering/) + reference repo upstream (xem attribution trong [`references/43-harness-engineering.md`](references/43-harness-engineering.md)).
+
+**Khi nào dùng Pattern G thay cho full pipeline?**
+
+| Tình huống | Dùng | Vì sao |
+|:-----------|:-----|:-------|
+| Greenfield, chưa có repo, muốn intake nhanh | `vibe harness init` + `spec-intake.md` | Lighter than RRI |
+| Story nhỏ, scope rõ (1-2 file change) | `vibe harness story "..."` | Tránh boilerplate TIP / Blueprint |
+| Story đụng auth/data/migrations | `vibe harness classify ...` rồi `story` | Auto-route sang `high-risk` 4-file folder |
+| Architecture decision (FE framework, DB choice) | `vibe harness decision "..."` | Auto-numbered ADR parallel với DESIGN-LOG |
+| Multi-team product, nhiều domain | Full pipeline (`/vibe-scan` → `/vibe-rri` → ...) | Pattern G chưa đủ depth cho multi-domain |
+
+**4 lệnh chính:**
+
+```bash
+# 10-flag risk classifier (heuristic + manual override)
+vibe harness classify "Add a refresh-token endpoint" --json
+# → lane: high_risk (auth là hard gate), validation: 5 layer
+
+# Copy 9 Harness templates vào project bất kỳ
+vibe harness --root /path/to/project init
+
+# Scaffold story packet, auto-classify lane
+vibe harness --root . story "User can reset password"
+# → docs/stories/US-001-user-can-reset-password.md (hoặc 4-file folder cho high-risk)
+
+# Scaffold ADR
+vibe harness --root . decision "Adopt JWT with refresh-token rotation"
+# → docs/decisions/0001-adopt-jwt-with-refresh-token-rotation.md
+```
+
+**10-flag taxonomy + 5 hard gate:**
+
+| Flag | Hard gate? | Trigger ví dụ |
+|:-----|:----------:|:--------------|
+| `auth` / `authorization` / `data_model` / `audit_security` / `external_systems` | ✓ | login, RBAC, migration, audit log, webhook |
+| `public_contracts` / `cross_platform` / `existing_behavior` / `weak_proof` / `multi_domain` | | API shape, mobile, refactor, no-tests, multi-domain |
+
+**Lane decision rule:**
+- ≥ 1 hard gate → `high_risk` (5-layer validation ladder)
+- 0/1 flag → `tiny` (unit test only)
+- 2-3 flag → `normal` (unit + integration)
+- ≥ 4 flag → `high_risk`
+
+**Pattern G là additive, không thay thế:**
+
+Existing users tiếp tục dùng `vibe scan` / `vibe rri` / `vibe blueprint` / 42 slash command như cũ.  Pattern G chỉ thêm 1 CLI surface mới (`vibe harness ...`) + 9 template + 1 reference doc + probe #97 — không touch logic cũ.
+
+**Đi sâu hơn:** [`references/43-harness-engineering.md`](references/43-harness-engineering.md) (vocabulary map VCK ↔ Harness, probe #97 contract, attribution).
+
+---
+
 ## Skills inspired by gstack
 
 The `/vck-*` slash commands + Python browser daemon are adapted —
@@ -515,7 +569,7 @@ Full walkthrough: [`USAGE_GUIDE.md` §18](USAGE_GUIDE.md#18-activation-cheat-she
 
 ## Layout
 
-**Surface inventory (v0.25.4)** — moved here from the opening to keep
+**Surface inventory (v0.26.0)** — moved here from the opening to keep
 the front matter focused on what the kit *does* rather than how many
 buttons it has:
 
@@ -536,7 +590,7 @@ buttons it has:
   hybrid lexical + embedding (default `hash-256`, offline).
 - **MCP integration** — stdio + inproc adapters; bundled selfcheck
   server (`vibecodekit.mcp_servers.selfcheck`).
-- **96 internal conformance probes** — see
+- **97 internal conformance probes** — see
   [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) for what
   these measure and what they explicitly do **not** claim (no
   HumanEval / MBPP / SWE-bench, no external benchmark, no API key
@@ -639,11 +693,11 @@ tham khảo dưới đây ứng với commit hiện tại trên nhánh `main` (x
 
 ```
 pytest                            : <N> passed                # at current main (see CHANGELOG.md)
-audit (×any)                      : 96/96 met=True[^bench]    # at current main (internal self-test)
+audit (×any)                      : 97/97 met=True[^bench]    # at current main (internal self-test)
 validate_release_matrix (default) : PASS
 ```
 
-[^bench]: Internal regression gate — see [BENCHMARKS-METHODOLOGY.md](BENCHMARKS-METHODOLOGY.md) for what the 96/96 number actually measures (architectural invariants only, not external code-quality benchmarks).
+[^bench]: Internal regression gate — see [BENCHMARKS-METHODOLOGY.md](BENCHMARKS-METHODOLOGY.md) for what the 97/97 number actually measures (architectural invariants only, not external code-quality benchmarks).
 
 Để lấy số chính xác cho bản đang ở local, chạy:
 
@@ -652,7 +706,7 @@ cat VERSION                                                  # ví dụ: 0.16.2
 VIBECODE_UPDATE_PACKAGE="$(pwd)/update-package" \
   PYTHONPATH=./scripts python3 -m pytest tests -q | tail -1  # số case pytest
 PYTHONPATH=./scripts python3 -m vibecodekit.conformance_audit \
-    --threshold 1.0 | head -1                                # ví dụ: parity: 100.00% (96/96, threshold 100%)
+    --threshold 1.0 | head -1                                # ví dụ: parity: 100.00% (97/97, threshold 100%)
 ```
 
 (Under `root`, the `test_install_into_readonly_dir` test is intentionally
@@ -710,12 +764,12 @@ Số ca pytest và số probe lớn dần theo từng release; bảng dưới đ
 phản ánh trạng thái **tại nhánh `main` hiện tại** (xem
 [`CHANGELOG.md`](CHANGELOG.md) cho lịch sử số liệu theo từng version,
 và [`BENCHMARKS-METHODOLOGY.md`](BENCHMARKS-METHODOLOGY.md) để biết
-"96/96" thực sự đo cái gì — không phải benchmark chất lượng ngoài).
+"97/97" thực sự đo cái gì — không phải benchmark chất lượng ngoài).
 
 | Gate | Result | What it measures |
 |---|---|---|
 | pytest (xem `pytest --collect-only -q \| tail`) | PASS | Unit + integration correctness |
-| conformance self-test | 96/96 met=True[^bench] | Internal regression invariants ([details](BENCHMARKS-METHODOLOGY.md)) |
+| conformance self-test | 97/97 met=True[^bench] | Internal regression invariants ([details](BENCHMARKS-METHODOLOGY.md)) |
 | validate_release_matrix (default) | PASS | Layout integrity across 3 deploy modes |
 | All 170 Cf codepoints × `rm -rf /` bypass | blocked | Permission engine coverage |
 

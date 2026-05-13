@@ -90,8 +90,24 @@ _HISTORICAL_GLOBS = (
 # may reference PJ7 because that's the org that shipped them.
 _HISTORICAL_NAMES = {"CHANGELOG.md"}
 
+# Cycle 22 / v0.26.0 — Pattern G "Harness Engineering" was adapted from
+# the upstream ``hoangnb24/harness-experimental`` repository.  The two
+# attribution files below must reference that org by URL so that human
+# readers can find the source material.  Treat them as permanent
+# upstream-attribution exceptions (like the historical release-notes
+# blocks above).  Do NOT widen this set lightly — additions must be
+# tied to a real upstream provenance, not convenience.
+_UPSTREAM_ATTRIBUTION_PATHS = {
+    "references/43-harness-engineering.md",
+    "docs/templates/harness/README.md",
+    "RELEASE_NOTES_v0.26.0.md",
+}
+
 
 def _is_historical(p: pathlib.Path) -> bool:
+    rel = p.relative_to(REPO_ROOT).as_posix()
+    if rel in _UPSTREAM_ATTRIBUTION_PATHS:
+        return True
     if p.name in _HISTORICAL_NAMES:
         return True
     for pattern in _HISTORICAL_GLOBS:
