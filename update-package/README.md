@@ -1,9 +1,9 @@
-# claw-code-pack (VibecodeKit Hybrid Ultra v0.25.4)
+# claw-code-pack (VibecodeKit Hybrid Ultra v0.26.0)
 
 Drop-in overlay for projects that use `claw-code` / Claude Code / Codex.
 After extracting into your project root you'll have:
 
-- `.claude/commands/` — **42 slash commands** at v0.25.4: 25 `/vibe-*` + 1 master `/vibe`
+- `.claude/commands/` — **42 slash commands** at v0.26.0: 25 `/vibe-*` + 1 master `/vibe`
   (`/vibe`, `/vibe-scaffold`, `/vibe-ship`, `/vibe-run`, `/vibe-doctor`,
   `/vibe-subagent`, `/vibe-memory`, `/vibe-approval`, `/vibe-task`,
   `/vibe-scan`, `/vibe-vision`, `/vibe-rri`, `/vibe-rri-t`, `/vibe-rri-ux`,
@@ -51,11 +51,11 @@ ca pytest tăng theo thời gian — chạy `pytest --collect-only -q | tail`
 để xem con số chính xác cho commit của bạn):
 
 - **pytest**: all actionable tests pass (số case tăng theo release; xem `CHANGELOG.md`)
-- **conformance self-test**: 96 / 96 internal regression probes pass[^bench] (self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`)
-- **fresh-extract self-test**: 92 / 96 probes pass
+- **conformance self-test**: 96 / 97 internal regression probes pass[^bench] (self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`)
+- **fresh-extract self-test**: 92 / 97 probes pass
 - **integration tests**: 8 e2e + 3 UX + 6 version-sync
 
-[^bench]: Internal regression gate — chi tiết "96/96" đo cái gì xem `BENCHMARKS-METHODOLOGY.md` (architectural invariants only, không phải benchmark code-quality ngoài như HumanEval / SWE-bench).
+[^bench]: Internal regression gate — chi tiết "97/97" đo cái gì xem `BENCHMARKS-METHODOLOGY.md` (architectural invariants only, không phải benchmark code-quality ngoài như HumanEval / SWE-bench).
 
 Lịch sử các milestone (v0.11.x / v0.15.x / v0.16.x) được giữ trong `CHANGELOG.md`.
 
@@ -74,7 +74,7 @@ trong `.claude/commands/`. Lệnh hay dùng:
 | `/vibe <mô tả>` | Master router — AI tự đi qua 8 bước pipeline từ mô tả tự nhiên |
 | `/vibe-scaffold <preset>/<stack>` | Sinh khung dự án (11 preset × 3 stack) |
 | `/vibe-doctor` | Health-check overlay đã cài đúng chưa |
-| `/vibe-audit` | 96 conformance probe (regression guard) |
+| `/vibe-audit` | 97 conformance probe (regression guard) |
 | `/vibe-permission "<cmd>"` | Hỏi: lệnh shell này có an toàn không (6-layer pipeline) |
 | `/vck-ship` | Atomic: test → review → qa → commit → push → PR |
 | `/vck-review` | Adversarial review 7 specialist |
@@ -85,7 +85,7 @@ worked example "App quản lý chi tiêu" A→Z, ~20 phút đọc):
 
 - [`docs/GUIDE_NONTECH_BEGINNER.md`](../docs/GUIDE_NONTECH_BEGINNER.md) — A→Z cho người không phải dev
 - [`README.md` §🇻🇳 Hướng dẫn tiếng Việt](../README.md#-hướng-dẫn-tiếng-việt--từ-a--z-cho-người-mới) — comprehensive cheatsheet
-- [`USAGE_GUIDE.md`](USAGE_GUIDE.md) — reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 96 probe
+- [`USAGE_GUIDE.md`](USAGE_GUIDE.md) — reference đầy đủ 31 CLI + 42 slash + 7 sub-agent + 33 hook + 97 probe
 
 > **Lưu ý (since v0.25.3 — xem `CHANGELOG.md`):** Khi chạy `vibe permission` demo nên thêm cờ
 > `--user-runtime` để state lưu về `~/.vibecode/` thay vì pollute project.

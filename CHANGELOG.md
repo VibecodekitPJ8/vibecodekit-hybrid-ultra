@@ -12,6 +12,63 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.26.0] — 2026-05-05
+
+Cycle 22 PR-K1 — **Harness Engineering Pattern G additive integration**.
+
+Adds a lightweight Harness-style ops layer alongside the existing
+8-step VIBECODE pipeline.  Inspired by the OpenAI
+"Harness Engineering" writeup
+(https://openai.com/index/harness-engineering/) and the
+`hoangnb24/harness-experimental` reference repository.
+
+**Minor bump** because we add a new public CLI surface
+(`vibe harness {classify,init,story,decision}`) — additive only, no
+existing behavior changed.
+
+Full rationale + per-PR commit map live in
+[`RELEASE_NOTES_v0.26.0.md`](RELEASE_NOTES_v0.26.0.md).
+
+### Added
+
+- `vibe harness classify <prompt>` — 10-flag risk classifier (heuristic
+  keyword match + manual override) returning a 3-lane decision
+  (tiny / normal / high_risk) with hard-gate escalation.
+- `vibe harness init [--directory <path>]` — copies the 9 Pattern G
+  templates into a target project under `docs/templates/harness/`.
+- `vibe harness story <title>` — auto-incremented `US-NNN-<slug>.md`
+  story packet (or 4-file folder for high-risk lane).
+- `vibe harness decision <title>` — auto-incremented `NNNN-<slug>.md`
+  ADR under `docs/decisions/`.
+- `references/43-harness-engineering.md` — Pattern G rationale +
+  vocabulary map (VCK ↔ Harness).
+- `docs/templates/harness/{story,spec-intake,decision,validation-report}.md`
+  + `docs/templates/harness/high-risk-story/{overview,design,execplan,validation}.md`
+  — 9 mirrored templates with upstream attribution.
+- `scripts/vibecodekit/harness_classifier.py` — pure-Python classifier
+  (mypy `--strict` clean).
+- 41 unit tests + 1 CLI smoke test under
+  `tests/test_harness_classifier.py`.
+- Probe #97 (`97_harness_pattern_g_ships`) — verifies templates ship,
+  classifier is deterministic, CLI is wired.
+
+### Changed
+
+- Audit probe count: **96 → 97**.
+- Pytest count: **1566 → 1607** (+41 from harness classifier suite).
+- VERSION + 7 mirror surfaces bumped 0.25.4 → 0.26.0.
+- README, USAGE_GUIDE, GUIDE_NONTECH, BENCHMARKS-METHODOLOGY,
+  SKILL.md, QUICKSTART.md + update-package mirrors all updated to
+  reference the new probe count.
+
+### Migration
+
+None — additive only.  Existing `vibe scan`/`audit`/`scaffold`/`...`
+subcommands and the 42-slash-command surface are unchanged.  Users
+wanting to opt into the lighter Harness flow can run
+`vibe harness init` on any existing project without touching the
+8-step pipeline configuration.
+
 ## [0.25.4] — 2026-05-05
 
 Cycle 20 + 21 wrap-up — **clean release artifact bundling Devin-session

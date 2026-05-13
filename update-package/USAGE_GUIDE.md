@@ -1,10 +1,10 @@
-# VibecodeKit Hybrid Ultra — Hướng dẫn sử dụng chi tiết (v0.25.4)
+# VibecodeKit Hybrid Ultra — Hướng dẫn sử dụng chi tiết (v0.26.0)
 
 Bộ kit đầy đủ để build dự án theo phương pháp **VIBECODE-MASTER** với **Full
-Agentic OS** runtime (96 internal conformance probes at v0.25.4 — self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`; all
+Agentic OS** runtime (97 internal conformance probes at v0.26.0 — self-test, not external benchmark; see `BENCHMARKS-METHODOLOGY.md`; all
 actionable tests pass từ repo root; bundled `tests/` trong skill zip chứa
 một subset đại diện để user smoke-test sau khi extract — xem §15.10).
-Bản này ứng với **v0.25.4** (hiện hành — xem `CHANGELOG.md` cho
+Bản này ứng với **v0.26.0** (hiện hành — xem `CHANGELOG.md` cho
 lịch sử các bản trước, mỗi entry kèm link PR + finding khoá lại):
 
 - **v0.16.1** — doc coherence + recheck cleanup (PR #16, this release)
@@ -29,7 +29,7 @@ Tài liệu hướng dẫn cách sử dụng kit trong **ChatGPT**, **OpenAI Cod
 > [§20 Slash command reference (42 lệnh)](#20-slash-command-reference--42-lệnh),
 > [§21 Sub-agent reference (7 vai)](#21-sub-agent-reference--7-vai),
 > [§22 Hook event reference (33 event + 4 script)](#22-hook-event-reference--33-event--4-script),
-> hoặc [§23 Conformance probe catalog (96 probe)](#23-conformance-probe-catalog--96-probe).
+> hoặc [§23 Conformance probe catalog (97 probe)](#23-conformance-probe-catalog--97-probe).
 
 ---
 
@@ -59,9 +59,10 @@ Tài liệu hướng dẫn cách sử dụng kit trong **ChatGPT**, **OpenAI Cod
 20. [Slash command reference — 42 lệnh](#20-slash-command-reference--42-lệnh)
 21. [Sub-agent reference — 7 vai](#21-sub-agent-reference--7-vai)
 22. [Hook event reference — 33 event + 4 script](#22-hook-event-reference--33-event--4-script)
-23. [Conformance probe catalog — 96 probe](#23-conformance-probe-catalog--96-probe)
+23. [Conformance probe catalog — 97 probe](#23-conformance-probe-catalog--97-probe)
 24. [Permission engine — 6 layer](#24-permission-engine--6-layer)
 25. [Release-gate strategy](#25-release-gate-strategy)
+32. [Harness Engineering — `vibe harness` (Pattern G)](#32-harness-engineering--vibe-harness-pattern-g)
 
 ### Phần III — Lịch sử & phụ lục
 
@@ -369,7 +370,7 @@ slash command trong `.claude/commands/` sẵn sàng.
 | `/vibe-rri-ui` | Bước 7 — pipeline 4-phase cho UI. |
 | `/vibe-verify` | Đóng báo cáo verify. |
 | `/vibe-complete` | Completion Report. |
-| `/vibe-audit` | Chạy 96 conformance probes (at v0.25.4). |
+| `/vibe-audit` | Chạy 97 conformance probes (at v0.26.0). |
 | `/vibe-doctor` | Chẩn đoán sức khỏe cài đặt. |
 | `/vibe-dashboard` | Dashboard runtime. |
 | `/vibe-permission <cmd>` | Hỏi permission engine có allow lệnh không. |
@@ -969,7 +970,7 @@ File HTML tự-chứa (không framework, không network), nhúng full JSON summa
 # Lifecycle
 vibe doctor                       # health check
 vibe dashboard                    # runtime dashboard
-vibe audit --threshold 0.85       # 96 probes at v0.25.4 (canonical count grows per release)
+vibe audit --threshold 0.85       # 97 probes at v0.26.0 (canonical count grows per release)
 vibe install <destination>        # cài overlay vào project
 vibe compact [--reactive]         # layer 4/5 compaction
 
@@ -1224,7 +1225,7 @@ vibe dashboard
 
 #### 19.3 `vibe audit`
 
-Chạy 96 conformance probe.  Default threshold = 0.85; release gate
+Chạy 97 conformance probe.  Default threshold = 0.85; release gate
 ở 1.0 (xem §25).
 
 ```bash
@@ -1234,7 +1235,7 @@ vibe audit --json                   # raw envelope
 vibe audit --probe 85_no_orphan_module   # chạy đúng 1 probe
 ```
 
-Tham khảo §23 cho catalog đầy đủ 96 probe.
+Tham khảo §23 cho catalog đầy đủ 97 probe.
 
 #### 19.4 `vibe install <destination>`
 
@@ -1492,7 +1493,7 @@ vibe manifest emit > manifest.json     # ghi file
 ```
 
 Manifest gồm metadata: 42 slash commands, 7 agents, 33 hook events,
-96 probes, version, build hash.
+97 probes, version, build hash.
 
 #### 19.20 `vibe refine`
 
@@ -1655,7 +1656,7 @@ như legacy alias. Hiện hành cả hai dạng đều hoạt động (xem CHANG
 | `/vibe-compact` | — | 5-layer context defense |
 | `/vibe-doctor` | — | health check |
 | `/vibe-dashboard` | — | summarise today's events |
-| `/vibe-audit` | security | 96-probe conformance audit |
+| `/vibe-audit` | security | 97-probe conformance audit |
 | `/vibe-install` | — | reconcile-install overlay vào project mới |
 | `/vibe-scaffold` | builder | scaffold preset (11 × 3 = 33) |
 | `/vibe-ship` | — | deploy 7 target |
@@ -1887,12 +1888,12 @@ echo '{"command":"echo evil"}' | python .claw/hooks/pre_tool_use_my_extra.py
 
 ---
 
-## 23. Conformance probe catalog — 96 probe
+## 23. Conformance probe catalog — 97 probe
 
 > Dùng `vibe audit` để chạy tất cả; `vibe audit --probe <name>` để
 > chạy 1 probe.  Threshold release-gate là **1.0** (100 % parity).
 
-### 23.1 Cluster theo domain (96 probe)
+### 23.1 Cluster theo domain (97 probe)
 
 | Cluster | Range | Mô tả |
 |---|---|---|
@@ -2014,7 +2015,7 @@ PYTHONPATH=./scripts pytest tests
 
 ```bash
 PYTHONPATH=./scripts python -m vibecodekit.conformance_audit --threshold 1.0
-# → parity: 100.00%   (96/96, threshold 100%)
+# → parity: 100.00%   (97/97, threshold 100%)
 ```
 
 ### 25.3 Gate 3 — release matrix L1+L2+L3
@@ -2039,6 +2040,29 @@ project layout.  Đảm bảo cả 3 đều xanh trước khi tag.
 
 Nguyên tắc: chia rủi ro theo PR; mỗi PR phải có 3 gate xanh; gates
 match xuyên CI (3.9 / 3.11 / 3.12).
+
+## 32. Harness Engineering — `vibe harness` (Pattern G)
+
+> **Ra mắt:** v0.26.0 (cycle 22 PR-K1, 2026-05-05).  Mirror — full
+> reference live trong [`../USAGE_GUIDE.md §32`](../USAGE_GUIDE.md#32-harness-engineering--vibe-harness-pattern-g).
+
+Pattern G "Harness-style ops layer" là entry path nhẹ hơn full 8-step pipeline.  Dựa trên [OpenAI Harness Engineering writeup](https://openai.com/index/harness-engineering/) + reference repo upstream (xem attribution trong [`../references/43-harness-engineering.md`](../references/43-harness-engineering.md)).
+
+**4 lệnh chính:**
+
+```bash
+vibe harness classify "Add a refresh-token endpoint" --json
+vibe harness --root /path/to/project init
+vibe harness --root . story "User can reset password"
+vibe harness --root . decision "Adopt JWT with refresh-token rotation"
+```
+
+**10-flag taxonomy + 5 hard gate** — 1 hard gate hit forces `high_risk` (5-layer validation ladder); 0/1 flag → `tiny`; 2-3 flag → `normal`; ≥ 4 → `high_risk`.
+
+**Pattern G là additive** — không thay thế TIP / RRI-T / 8-step pipeline.  Existing user dùng `/vibe-*` slash command như cũ.
+
+**Đi sâu hơn:** [`../USAGE_GUIDE.md §32`](../USAGE_GUIDE.md#32-harness-engineering--vibe-harness-pattern-g), [`../references/43-harness-engineering.md`](../references/43-harness-engineering.md), [`../RELEASE_NOTES_v0.26.0.md`](../RELEASE_NOTES_v0.26.0.md).
+
 ## 16. Release history
 
 ### v0.16.1 — doc coherence + recheck cleanup (PR #16)

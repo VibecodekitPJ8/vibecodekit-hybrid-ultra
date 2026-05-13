@@ -1,4 +1,4 @@
-# Hướng dẫn cho người mới — VibecodeKit Hybrid Ultra v0.25.4
+# Hướng dẫn cho người mới — VibecodeKit Hybrid Ultra v0.26.0
 
 > **Đối tượng:** Người không phải developer — chủ sản phẩm, founder,
 > nhà tư vấn, nhà phân tích, người đang dùng ChatGPT / Claude Code /
@@ -141,7 +141,7 @@ Bạn nên thấy output kiểu:
 ====================================================================
   Step 1/6: doctor health-check               OK
   Step 2/6: permission engine (5 cases)       OK
-  Step 3/6: conformance audit (96 probes)     OK
+  Step 3/6: conformance audit (97 probes)     OK
   Step 4/6: scaffold preview                  OK
   Step 5/6: intent router                     OK
   Step 6/6: MCP selfcheck                     OK
@@ -326,7 +326,7 @@ Sau khi tự (hoặc nhờ AI) viết code thật vào khung, gõ:
 ```
 
 Tool chạy:
-- 96 conformance probe (kiểm tra structure)
+- 97 conformance probe (kiểm tra structure)
 - RRI-T gate (functional testing 7 dimensions × 8 stress axes)
 - RRI-UX gate (UX testing 7 dimensions × 5 personas)
 - Anti-pattern check (12 AP — xem [§6.2](#62-anti-pattern-catalog-12-ap))
@@ -574,7 +574,7 @@ Bạn không cần nhớ hết 42 slash command.  10 lệnh sau đủ cho 95% us
 | `/vibe-verify` | Khi build xong, cần kiểm tra chất lượng |
 | `/vibe-ship` | Khi sẵn sàng deploy |
 | `/vibe-doctor` | Khi nghi ngờ cài sai (sanity check) |
-| `/vibe-audit` | Khi muốn xem 96 probe self-test (rare) |
+| `/vibe-audit` | Khi muốn xem 97 probe self-test (rare) |
 
 ### 7.1. Verb shortcut (siêu ngắn)
 
@@ -780,7 +780,7 @@ In ra dán bàn làm việc:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  VibecodeKit Hybrid Ultra v0.25.4 — 1-page cheatsheet        │
+│  VibecodeKit Hybrid Ultra v0.26.0 — 1-page cheatsheet        │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │  CÀI:    pip3 install -e .                                   │
@@ -820,4 +820,4 @@ In ra dán bàn làm việc:
 **Phản hồi & câu hỏi:** Mở issue tại
 https://github.com/VibecodekitPJ8/vibecodekit-hybrid-ultra/issues
 
-**Phiên bản tài liệu:** v0.25.4 (2026-05-05) — Cycle 21 — clean release artifact, cycle 18/19/20 polish features vẫn áp dụng
+**Phiên bản tài liệu:** v0.26.0 (2026-05-05) — Cycle 21 — clean release artifact, cycle 18/19/20 polish features vẫn áp dụng

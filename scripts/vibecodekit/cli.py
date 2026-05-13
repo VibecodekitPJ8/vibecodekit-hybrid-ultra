@@ -839,6 +839,238 @@ def _cmd_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+# ---------------------------------------------------------------------------
+# Cycle 22 / v0.26.0 — Pattern G "Harness Engineering" CLI surface.
+# See ``references/43-harness-engineering.md`` for the rationale.
+# ---------------------------------------------------------------------------
+
+def _harness_repo_root() -> Path:
+    """Locate the on-disk VibecodeKit checkout (source of harness templates)."""
+    here = Path(__file__).resolve()
+    # scripts/vibecodekit/cli.py → repo root is 2 levels up
+    return here.parent.parent.parent
+
+
+def _cmd_harness(args: argparse.Namespace) -> int:
+    sub = args.harness_cmd
+    if sub == "classify":
+        return _cmd_harness_classify(args)
+    if sub == "init":
+        return _cmd_harness_init(args)
+    if sub == "story":
+        return _cmd_harness_story(args)
+    if sub == "decision":
+        return _cmd_harness_decision(args)
+    raise SystemExit(f"unknown harness subcommand: {sub!r}")
+
+
+def _cmd_harness_classify(args: argparse.Namespace) -> int:
+    from . import harness_classifier as _hc
+    extra_flags = []
+    if getattr(args, "flags", None):
+        extra_flags = [t for t in args.flags.split(",") if t.strip()]
+    override = None
+    if getattr(args, "lane", None):
+        lane_tok = args.lane.replace("-", "_").lower()
+        try:
+            override = _hc.RiskLane(lane_tok)
+        except ValueError:
+            print(json.dumps(
+                {"error": "unknown lane",
+                 "lane": args.lane,
+                 "valid": [m.value for m in _hc.RiskLane]},
+                ensure_ascii=False, indent=2), file=sys.stderr)
+            return 2
+    payload = _hc.classify_to_dict(
+        args.prompt, extra_flags=extra_flags, override_lane=override,
+    )
+    if getattr(args, "json", False):
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        print(f"lane: {payload['lane']}")
+        if payload["hard_gates"]:
+            print(f"hard gates: {', '.join(payload['hard_gates'])}")
+        if payload["flags_set"]:
+            print(f"flags: {', '.join(payload['flags_set'])}")
+        else:
+            print("flags: (none)")
+        print(f"reason: {payload['reason']}")
+        print(f"validation: {', '.join(payload['validation_required'])}")
+    return 0
+
+
+_HARNESS_TEMPLATE_FILES = (
+    "README.md",
+    "story.md",
+    "spec-intake.md",
+    "decision.md",
+    "validation-report.md",
+    "high-risk-story/overview.md",
+    "high-risk-story/design.md",
+    "high-risk-story/execplan.md",
+    "high-risk-story/validation.md",
+)
+
+
+def _cmd_harness_init(args: argparse.Namespace) -> int:
+    source_root = _harness_repo_root() / "docs" / "templates" / "harness"
+    dest_root = Path(args.directory).resolve() / "docs" / "templates" / "harness"
+    written: list[str] = []
+    skipped: list[str] = []
+    errors: list[dict[str, str]] = []
+    for rel in _HARNESS_TEMPLATE_FILES:
+        src = source_root / rel
+        dst = dest_root / rel
+        if not src.exists():
+            errors.append({"file": rel, "error": "source template missing", "src": str(src)})
+            continue
+        if dst.exists() and not args.force:
+            skipped.append(rel)
+            continue
+        if args.dry_run:
+            written.append(rel)
+            continue
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+        written.append(rel)
+    payload = {
+        "destination": str(dest_root),
+        "written": written,
+        "skipped": skipped,
+        "errors": errors,
+        "dry_run": args.dry_run,
+    }
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    return 1 if errors else 0
+
+
+def _cmd_harness_story(args: argparse.Namespace) -> int:
+    from . import harness_classifier as _hc
+    stories_dir = Path(args.root) / "docs" / "stories"
+    existing: list[str] = []
+    if stories_dir.is_dir():
+        for entry in stories_dir.iterdir():
+            stem = entry.name.split("-", 1)[0] if "-" in entry.name else entry.stem
+            if stem.upper().startswith("US"):
+                existing.append(entry.name.split("-")[0] + "-" + entry.name.split("-")[1])
+    story_id = args.id or _hc.next_story_id(existing)
+    slug = _hc.slugify(args.title)
+    extra = []
+    if getattr(args, "flags", None):
+        extra = [t for t in args.flags.split(",") if t.strip()]
+    override = None
+    if getattr(args, "lane", None):
+        lane_tok = args.lane.replace("-", "_").lower()
+        try:
+            override = _hc.RiskLane(lane_tok)
+        except ValueError:
+            print(json.dumps(
+                {"error": "unknown lane",
+                 "lane": args.lane,
+                 "valid": [m.value for m in _hc.RiskLane]},
+                ensure_ascii=False, indent=2), file=sys.stderr)
+            return 2
+    result = _hc.classify(args.title, extra_flags=extra, override_lane=override)
+    template_root = _harness_repo_root() / "docs" / "templates" / "harness"
+    if result.lane is _hc.RiskLane.HIGH_RISK:
+        src_dir = template_root / "high-risk-story"
+        dest_dir = stories_dir / f"{story_id}-{slug}"
+        if dest_dir.exists() and not args.force:
+            print(json.dumps(
+                {"error": "story directory exists",
+                 "path": str(dest_dir),
+                 "hint": "pass --force to overwrite"},
+                ensure_ascii=False, indent=2), file=sys.stderr)
+            return 1
+        dest_dir.mkdir(parents=True, exist_ok=True)
+        written: list[str] = []
+        for name in ("overview.md", "design.md", "execplan.md", "validation.md"):
+            (dest_dir / name).write_text(
+                (src_dir / name).read_text(encoding="utf-8")
+                .replace("US-XXX", story_id)
+                .replace("Story Title", args.title)
+                .replace("Story title", args.title),
+                encoding="utf-8",
+            )
+            written.append(name)
+        payload = {
+            "story_id": story_id,
+            "title": args.title,
+            "lane": result.lane.value,
+            "flags": [f.value for f in result.flags_set],
+            "path": str(dest_dir),
+            "written": written,
+        }
+    else:
+        stories_dir.mkdir(parents=True, exist_ok=True)
+        dest = stories_dir / f"{story_id}-{slug}.md"
+        if dest.exists() and not args.force:
+            print(json.dumps(
+                {"error": "story file exists",
+                 "path": str(dest),
+                 "hint": "pass --force to overwrite"},
+                ensure_ascii=False, indent=2), file=sys.stderr)
+            return 1
+        text = (template_root / "story.md").read_text(encoding="utf-8")
+        text = text.replace("US-XXX", story_id).replace("Story Title", args.title)
+        # Pre-fill the lane line
+        text = text.replace(
+            "tiny | normal | high-risk",
+            result.lane.value,
+            1,
+        )
+        dest.write_text(text, encoding="utf-8")
+        payload = {
+            "story_id": story_id,
+            "title": args.title,
+            "lane": result.lane.value,
+            "flags": [f.value for f in result.flags_set],
+            "path": str(dest),
+            "written": [dest.name],
+        }
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    return 0
+
+
+def _cmd_harness_decision(args: argparse.Namespace) -> int:
+    from . import harness_classifier as _hc
+    decisions_dir = Path(args.root) / "docs" / "decisions"
+    existing: list[str] = []
+    if decisions_dir.is_dir():
+        for entry in decisions_dir.iterdir():
+            stem = entry.name.split("-", 1)[0] if "-" in entry.name else entry.stem
+            existing.append(stem)
+    adr_id = args.id or _hc.next_adr_id(existing)
+    slug = _hc.slugify(args.title)
+    decisions_dir.mkdir(parents=True, exist_ok=True)
+    dest = decisions_dir / f"{adr_id}-{slug}.md"
+    if dest.exists() and not args.force:
+        print(json.dumps(
+            {"error": "decision file exists",
+             "path": str(dest),
+             "hint": "pass --force to overwrite"},
+            ensure_ascii=False, indent=2), file=sys.stderr)
+        return 1
+    template_root = _harness_repo_root() / "docs" / "templates" / "harness"
+    text = (template_root / "decision.md").read_text(encoding="utf-8")
+    text = text.replace("NNNN — Decision title", f"{adr_id} — {args.title}", 1)
+    # Pre-fill the status line
+    text = text.replace(
+        "proposed | accepted | superseded | deprecated",
+        args.status,
+        1,
+    )
+    dest.write_text(text, encoding="utf-8")
+    payload = {
+        "adr_id": adr_id,
+        "title": args.title,
+        "status": args.status,
+        "path": str(dest),
+    }
+    print(json.dumps(payload, ensure_ascii=False, indent=2))
+    return 0
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="vibe")
     sp = ap.add_subparsers(dest="cmd", required=True)
@@ -849,7 +1081,7 @@ def main(argv=None) -> int:
                      "rri-t", "rri-ux", "vn-check", "config", "intent",
                      "scaffold", "ship", "manifest", "refine", "verify",
                      "anti-patterns", "module", "context", "activate",
-                     "team", "learn", "pipeline", "verb", "demo"):
+                     "team", "learn", "pipeline", "verb", "demo", "harness"):
         sub = sp.add_parser(cmd_name)
         sub.add_argument("--root", default=".")
         if cmd_name == "run":
@@ -1184,6 +1416,63 @@ def main(argv=None) -> int:
             sub.set_defaults(fn=_cmd_verb)
         elif cmd_name == "demo":
             sub.set_defaults(fn=_cmd_demo)
+        elif cmd_name == "harness":
+            sp2 = sub.add_subparsers(dest="harness_cmd", required=True)
+            hc = sp2.add_parser(
+                "classify",
+                help="10-flag risk classifier (Pattern G).",
+            )
+            hc.add_argument("prompt",
+                            help="Story / feature description to classify.")
+            hc.add_argument("--flags", default=None,
+                            help="Comma-separated extra flags (e.g. "
+                                 "'auth,data_model'); merged with heuristic.")
+            hc.add_argument("--lane", default=None,
+                            help="Force a lane (tiny|normal|high-risk); "
+                                 "heuristic still recorded in reason.")
+            hc.add_argument("--json", action="store_true",
+                            help="Emit JSON instead of human-readable text.")
+            hc.set_defaults(fn=_cmd_harness)
+            hi = sp2.add_parser(
+                "init",
+                help="Copy harness templates into a target project.",
+            )
+            hi.add_argument("--directory", default=".",
+                            help="Target project root (default: cwd).")
+            hi.add_argument("--force", action="store_true",
+                            help="Overwrite existing template files.")
+            hi.add_argument("--dry-run", action="store_true",
+                            help="List what would be written without writing.")
+            hi.set_defaults(fn=_cmd_harness)
+            hs = sp2.add_parser(
+                "story",
+                help="Scaffold a new US-NNN story packet under docs/stories/.",
+            )
+            hs.add_argument("title",
+                            help="Story title (e.g. 'User can reset password').")
+            hs.add_argument("--lane", default=None,
+                            help="Force lane (tiny|normal|high-risk); "
+                                 "default uses classifier.")
+            hs.add_argument("--flags", default=None,
+                            help="Comma-separated extra flags for classifier.")
+            hs.add_argument("--id", default=None,
+                            help="Override auto-incremented ID (e.g. 'US-042').")
+            hs.add_argument("--force", action="store_true",
+                            help="Overwrite an existing story at the same path.")
+            hs.set_defaults(fn=_cmd_harness)
+            hd = sp2.add_parser(
+                "decision",
+                help="Scaffold a numbered ADR under docs/decisions/.",
+            )
+            hd.add_argument("title",
+                            help="Decision title (e.g. 'Adopt JWT rotation').")
+            hd.add_argument("--status", default="proposed",
+                            help="Initial status (default: proposed).")
+            hd.add_argument("--id", default=None,
+                            help="Override auto-incremented ADR ID (e.g. '0042').")
+            hd.add_argument("--force", action="store_true",
+                            help="Overwrite an existing ADR at the same path.")
+            hd.set_defaults(fn=_cmd_harness)
 
     ns = ap.parse_args(argv)
     return ns.fn(ns)

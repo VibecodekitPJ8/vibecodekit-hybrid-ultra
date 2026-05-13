@@ -12,6 +12,14 @@ and [Semver](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.26.0] — 2026-05-05
+
+Cycle 22 PR-K1 — **Harness Engineering Pattern G additive integration**.
+
+See [`../CHANGELOG.md`](../CHANGELOG.md) for the full entry.  Mirror
+maintained for users consuming the overlay from the `update-package/`
+subtree.
+
 ## [0.25.4] — 2026-05-05
 
 Cycle 20 + 21 wrap-up — **clean release artifact bundling Devin-session
